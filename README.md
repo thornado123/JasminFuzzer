@@ -31,3 +31,22 @@ So far we start out by checking if it is possible to break the compiler on corre
 
 This part of the compiler can be tested using the annotations of the Jasmin programs. These has to be well formed as well where here the annotations are the variables that can be adjusted with the rest of the program. We will test this part if there is time.
 
+## Interesting papers
+
+https://eprint.iacr.org/2019/1155.pdf
+https://blackboard.au.dk/bbcswebdav/pid-2535790-dt-content-rid-8052926_1/courses/BB-Cou-UUVA-89108/BB-Cou-UUVA-
+89108_ImportedContent_20200129103750/Group10.pdf
+https://arxiv.org/pdf/1904.04606.pdf
+https://arxiv.org/pdf/1902.09334.pdf
+https://rjlipton.wordpress.com/2019/11/19/a-clever-way-to-find-compiler-bugs/#comment-106348
+https://blog.regehr.org/archives/1700
+https://srg.doc.ic.ac.uk/files/papers/compilerbugs-oopsla-19.pdf
+https://i.blackhat.com/asia-19/Fri-March-29/bh-asia-Dominiak-Efficient-Approach-to-Fuzzing-Interpreters-wp.pdf
+https://eprint.iacr.org/2019/1155.pdf
+https://vincentlaporte.info/CCS2017_Jasmin+presentation.pdf
+https://www.fuzzingbook.org/html/Fuzzer.html
+https://github.com/rohanpadhye/jqf/wiki/Fuzzing-a-Compiler
+https://srg.doc.ic.ac.uk/files/papers/compilerbugs-oopsla-19.pdf
+web.engr.oregonstate.edu/~wongwe/papers/pdf/pldi13.pdf
+https://www.phoronix.com/scan.php?page=news_item&px=Prog-Fuzz-Compiler-Fuzzing
+http://fm.csl.sri.com/SSFT19/gregoir-slides2.pdf
