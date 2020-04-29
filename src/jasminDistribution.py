@@ -42,6 +42,64 @@ class Functions:
             return draw_from_dist(self.actions, self.seed)
 
 
+class Instructions:
+
+    def __init__(self, seed):
+        self.seed = seed
+        self.actions = {
+            "pinstr" : 1,
+            "pblock" : 0,
+            "peqop"  : 0,
+            "plvalue": 0
+        }
+
+        self.sub_actions = {
+
+            "pinstr" : {
+
+                "arrayinit" : 0.1,  # ARRAYINIT ⟨parens⟨var⟩⟩ ;
+                "if"        : 0.2,
+                "ifelse"    : 0.2,
+                #"forto"     : 0.1,
+                #"fordown"   : 0.1,
+                "while"     : 0.5
+            },
+
+            "peqop" : {
+
+                "="     : 0.125,
+                "+="    : 0.125,
+                "-="    : 0.125,
+                "*="    : 0.125,
+                ">>="   : 0.125,
+                "<<="   : 0.125,
+                "&="    : 0.125,
+                "^="    : 0.125
+
+            },
+
+            "plvalue" : {
+
+                "_"     : 0.2,
+                "var"   : 0.5,
+                "array" : 0.3
+
+            }
+
+        }
+
+
+
+    def get_action(self, sub=None):
+
+        if sub is not None:
+
+            return draw_from_dist(self.sub_actions[sub], self.seed)
+
+        else:
+
+            return draw_from_dist(self.actions, self.seed)
+
 
 class Types:
 
@@ -102,18 +160,18 @@ class Expressions:
             "peop2" : 0.0
         }
 
+
         self.sub_actions = {
 
             "pexpr" : {
 
-                "true"  :
-                "false" :
-                "int"   :
-                "var"   :
-                "array" :
-                "touple":
-                ""
-
+                "true"  : 0.09,  # TRUE
+                "false" : 0.09,  # FALSE
+                "int"   : 0.08,  # INT
+                "var"   : 0.2,  # var
+                "array" : 0.18,  # <var>[<pexpr>]
+                "negvar": 0.12,  # < peop1 > < pexpr >
+                "exp"   : 0.24,  # < pexpr > < peop2 > < pexpr >
             },
 
             "peop1" : {
