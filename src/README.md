@@ -26,4 +26,4 @@ added to the report.
 
 To achieve more complex programs that use more complex tokens but without entering a recursive non terminating loop
 the probabilities of the more complex tokens should be decay with respect to the depth of the current scope. 
-
+While the terminating/final token's probabilities should grow.
