@@ -21,3 +21,9 @@ added to the report.
 2. More tuple stuff BNF: ⟨var⟩ ⟨parens_tuple⟨pexpr⟩⟩ ;
 3. Signed operators and pipeq has ben left out
 4. Mem access left out BNF [<parens<ptype>>]<brackets(<var> + <pexpr>)>
+
+# Achieving complex program
+
+To achieve more complex programs that use more complex tokens but without entering a recursive non terminating loop
+the probabilities of the more complex tokens should be decay with respect to the depth of the current scope. 
+

@@ -18,5 +18,44 @@ class Nonterminals(enum.Enum):
     
     """
 
-    Pexpr = "pexpr"
-    Ident = ""
+    Pexpr   = "pexpr"
+    Ident   = "ident"
+    Prim    = "prim"
+    Peop1   = "peop1"
+    Peop2   = "peop2"
+    Var     = "var"
+
+    """
+    
+        INSTRUCTIONS
+    
+    """
+
+    Pinstr  = "pinstr"
+    Pblock  = "pblock"
+    Peqop   = "peqop"
+    Plvalue = "plvalue"
+
+    """
+    
+        FUNCTIONS
+    
+    """
+
+    Pfunbody    = "pfunbody"
+    Storage     = "storage"
+    Stor_type   = "stor_type"
+    Pvardecl    = "pvardecl"
+
+    """
+    
+        GLOBAL DECLARATIONS
+    
+    """
+
+    Module      = "module"
+    Top         = "top"
+    Call_conv   = "call_conv"
+    Pfundef     = "pfundef"
+    Param       = "param"
+    Pglobal     = "pglobal"

@@ -1,4 +1,5 @@
 import numpy as np
+from jasminNonterminalAndTokens import Nonterminals as JN
 
 
 def draw_from_dist(dist, seed):
@@ -7,7 +8,15 @@ def draw_from_dist(dist, seed):
     values  = list(dist.keys())
     probs   = list(dist.values())
 
-    return values[np.random.choice(np.arange(len(probs)), p=probs)]
+
+    #print(probs)
+    #print(values)
+
+    val = np.random.choice(np.arange(len(probs)), p=probs)
+    #print(np.arange(len(probs)))
+    #print(val)
+
+    return values[val]
 
 
 class Functions:
@@ -15,15 +24,15 @@ class Functions:
     def __init__(self, seed):
         self.seed = seed
         self.actions = {
-            "pfunbody" : 0.5,
-            "storage"  : 0.1,
-            "stor_type": 0.1,
-            "pvardecl" : 0.3
+            JN.Pfundef : 0.5,
+            JN.Storage : 0.1,
+            JN.Stor_type: 0.1,
+            JN.Pvardecl: 0.3
         }
 
         self.sub_actions = {
 
-            "storage" : {
+            JN.Storage : {
                 "reg": 0.8,
                 "stack": 0.1,
                 "inline": 0.1
@@ -47,25 +56,25 @@ class Instructions:
     def __init__(self, seed):
         self.seed = seed
         self.actions = {
-            "pinstr" : 1,
-            "pblock" : 0,
-            "peqop"  : 0,
-            "plvalue": 0
+            JN.Pinstr : 1,
+            JN.Pblock : 0,
+            JN.Peqop  : 0,
+            JN.Plvalue: 0
         }
 
         self.sub_actions = {
 
-            "pinstr" : {
+            JN.Pinstr : {
 
                 "arrayinit" : 0.1,  # ARRAYINIT ⟨parens⟨var⟩⟩ ;
-                "if"        : 0.2,
-                "ifelse"    : 0.2,
+                "if"        : 0.1,
+                "ifelse"    : 0.1,
                 #"forto"     : 0.1,
                 #"fordown"   : 0.1,
-                "while"     : 0.5
+                "while"     : 0.7
             },
 
-            "peqop" : {
+            JN.Peqop: {
 
                 "="     : 0.125,
                 "+="    : 0.125,
@@ -78,7 +87,7 @@ class Instructions:
 
             },
 
-            "plvalue" : {
+            JN.Plvalue : {
 
                 "_"     : 0.2,
                 "var"   : 0.5,
@@ -106,13 +115,13 @@ class Types:
     def __init__(self, seed):
         self.seed = seed
         self.actions = {
-            "ptype" : 0.5,
-            "utype" : 0.5
+            JN.Ptype : 0.5,
+            JN.Utype : 0.5
         }
 
         self.sub_actions = {
 
-            "utype" : {
+            JN.Utype : {
 
                 "u8" : 0.05,
                 "u16": 0.1,
@@ -123,12 +132,12 @@ class Types:
 
             },
 
-            "ptype" : {
+            JN.Ptype : {
 
-                "bool": 0.2,
-                "int" : 0.2,
-                "utype": 0.4,
-                "array": 0.2
+                "bool": 0.1,
+                "int" : 0.1,
+                JN.Utype: 0.5,
+                "array": 0.3
 
             }
 
@@ -152,36 +161,36 @@ class Expressions:
     def __init__(self, seed):
         self.seed = seed
         self.actions = {
-            "pexpr" : 1.0,
-            "ident" : 0.0,
-            "var"   : 0.0,
-            "prim"  : 0.0,
-            "peop1" : 0.0,
-            "peop2" : 0.0
+            JN.Pexpr: 1.0,
+            JN.Ident: 0.0,
+            JN.Var  : 0.0,
+            JN.Prim : 0.0,
+            JN.Peop1: 0.0,
+            JN.Peop2: 0.0
         }
 
 
         self.sub_actions = {
 
-            "pexpr" : {
+            JN.Pexpr : {
 
-                "true"  : 0.09,  # TRUE
-                "false" : 0.09,  # FALSE
-                "int"   : 0.08,  # INT
-                "var"   : 0.2,  # var
-                "array" : 0.18,  # <var>[<pexpr>]
-                "negvar": 0.12,  # < peop1 > < pexpr >
-                "exp"   : 0.24,  # < pexpr > < peop2 > < pexpr >
+                "true"  : 0.05,  # TRUE
+                "false" : 0.05,  # FALSE
+                "int"   : 0.05,  # INT
+                "var"   : 0.25,  # var
+                "array" : 0.1,  # <var>[<pexpr>]
+                "negvar": 0.1,  # < peop1 > < pexpr >
+                "exp"   : 0.4,  # < pexpr > < peop2 > < pexpr >
             },
 
-            "peop1" : {
+            JN.Peop1: {
 
                 "!" : 0.5,
                 "-" : 0.5
 
             },
 
-            "peop2" : {
+            JN.Peop2: {
 
                 "+"     : 0.2,
                 "-"     : 0.2,
@@ -217,28 +226,28 @@ class GlobalDeclarations:
     def __init__(self, seed):
         self.seed = seed
         self.actions = {
-            "module"    : 0.01,
-            "top"       : 0.25,
-            "call_conv" : 0.0,
-            "pfundef"   : 0.5,
-            "pparam"    : 0.1,
-            "pglobal"   : 0.14
+            JN.Module   : 0.01,
+            JN.Top      : 0.25,
+            JN.Call_conv: 0.0,
+            JN.Pfundef  : 0.5,
+            JN.Param    : 0.1,
+            JN.Pglobal  : 0.14
         }
 
         self.sub_actions = {
 
-            "module" : {
+            JN.Module : {
                 "top" : 0.5,
                 "error" : 0.5,
             },
 
-            "top" : {
+            JN.Top : {
                 "pfundef":   0.75,
                 "pparam":    0.07,
                 "pglobal":   0.18
             },
 
-            "call_conv" : {
+            JN.Call_conv : {
                 "export" : 0.2,
                 "inline" : 0.8
             }

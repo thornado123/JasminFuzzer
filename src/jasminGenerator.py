@@ -76,8 +76,12 @@
 
 """
 
+import numpy as np
 import jasminDistribution as JD
+from jasminNonterminalAndTokens import Nonterminals as JN
+from jasminScopes import Scopes as JS
 from datetime import datetime
+
 
 
 class JasminGenerator:
@@ -89,7 +93,15 @@ class JasminGenerator:
         self.action_types       = JD.Types(self.seed)
         self.action_functions   = JD.Functions(self.seed)
         self.action_expressions = JD.Expressions(self.seed)
-        self.action_instructions = JD.Instructions(self.seed)
+        self.action_instructions= JD.Instructions(self.seed)
+
+        self.variables = {
+
+            JS.Variables    : [],
+            JS.Function_name: [],
+            JS.Decl         : []
+
+        }
 
     def get_program(self):
 
@@ -104,43 +116,81 @@ class JasminGenerator:
 
         return program
 
+    def get_variable(self, scope):
+
+        print("scope: ", scope)
+
+        if scope == JS.Variables:
+
+            index = np.random.choice(self.variables[JS.Variables], 1, replace=False)
+            return index[0]
+
+        if scope == JS.Decl:
+
+            new_var = "v"
+
+            if len(self.variables[JS.Variables]) == 0:
+
+                self.variables[JS.Variables] = [new_var + "0"]
+                return new_var + "0"
+
+            else:
+
+                self.variables[JS.Variables].append(new_var + str(len(self.variables[JS.Variables])))
+                return new_var + str(len(self.variables[JS.Variables]))
+
+        if scope == JS.Function_name:
+
+            if self.variables[JS.Function_name] == 0:
+
+                new_func = "f0"
+                self.variables[JS.Function_name] = [new_func]
+                return new_func
+
+            else:
+
+                new_func = "f" + str(len(self.variables[JS.Function_name]))
+                self.variables[JS.Function_name].append(new_func)
+
+                return new_func
+
     def global_declarations(self, action=None):
 
         if action is None:
 
             action = self.action_global.get_action()
 
-        if action == "module":
+        if action == JN.Module:
 
-            action = self.action_global.get_action("module")
+            action = self.action_global.get_action(JN.Module)
 
-            if action == "top":
+            if action == JN.Top:
 
-                return self.global_declarations("top")+" * EOF"
+                return self.global_declarations(JN.Top)+" * EOF"
 
             else:
 
                 return "error"
 
-        if action == "top":
+        if action == JN.Top:
 
-            action = self.action_global.get_action("top")
+            action = self.action_global.get_action(JN.Top)
 
-            if action == "pfundef":
+            if action == JN.Pfundef:
 
-                return self.global_declarations("pfundef")
+                return self.global_declarations(JN.Pfundef)
 
-            if action == "pparam":
+            if action == JN.Param:
 
-                return self.global_declarations("pparam")
+                return self.global_declarations(JN.Param)
 
-            if action == "pglobal":
+            if action == JN.Pglobal:
 
-                return self.global_declarations("pglobal")
+                return self.global_declarations(JN.Pglobal)
 
-        if action == "call_conv":
+        if action == JN.Call_conv:
 
-            action = self.action_global.get_action("call_conv")
+            action = self.action_global.get_action(JN.Call_conv)
 
             if action == "export":
 
@@ -150,21 +200,21 @@ class JasminGenerator:
 
                 return "inline"  # inline is default
 
-        if action == "pfundef":
+        if action == JN.Pfundef:
 
-            return self.global_declarations(action="call_conv") + " fn " + self.expressions(action="ident") + \
-                    "(" + self.functions(action="stor_type") \
-                    + self.expressions(action="var") + ") -> (" \
-                    + self.functions(action="stor_type") + ")" \
-                    + self.functions(action="pfunbody")
+            return self.global_declarations(action=JN.Call_conv) + " fn " + self.expressions(action=JN.Ident, scope=JS.Function_name) + \
+                    "(" + self.functions(action=JN.Stor_type) + " "\
+                    + self.expressions(action="var", scope=JS.Decl) + ") -> " \
+                    + self.functions(action=JN.Stor_type) \
+                    + self.functions(action=JN.Pfunbody)
 
-        if action == "pparam":
+        if action == JN.Param:
 
-            return "param" + self.types(action="ptype") + self.expressions(action="ident") + " = " + self.expressions(action="pexpr")
+            return JN.Param + self.types(action=JN.Ptype) + self.expressions(action=JN.Ident) + " = " + self.expressions(action=JN.Pexpr)
 
-        if action == "pglobal":
+        if action == JN.Pglobal:
 
-            return self.expressions(action="ident") + " = " + self.expressions(action="pexpr")
+            return self.expressions(action=JN.Ident) + " = " + self.expressions(action=JN.Pexpr)
 
     """
     
@@ -172,15 +222,15 @@ class JasminGenerator:
     
     """
 
-    def expressions(self, action=None):
+    def expressions(self, action=None, scope=None):
 
         if action is None:
 
             action = self.action_expressions.get_action()
 
-        if action == "pexpr":
+        if action == JN.Pexpr:
 
-            action = self.action_expressions.get_action(sub="pexpr")
+            action = self.action_expressions.get_action(sub=JN.Pexpr)
 
             if action == "true":
 
@@ -196,31 +246,31 @@ class JasminGenerator:
 
             if action == "var":
 
-                return self.expressions(action="var")
+                return self.expressions(action="var", scope=scope)
 
             if action == "array":
 
-                return self.expressions(action="var") + "[" + self.expressions(action="pexpr") + "]"
+                return self.expressions(action="var", scope=scope) + "[" + self.expressions(action=JN.Pexpr, scope=scope) + "]"
 
             if action == "negvar":
 
-                return self.expressions(action="peop1") + self.expressions(action="pexpr")
+                return self.expressions(action=JN.Peop1) + self.expressions(action=JN.Pexpr, scope=scope)
 
             if action == "exp":
 
-                return self.expressions(action="pexpr") + self.expressions(action="peop2") + self.expressions(action="pexpr")
+                return self.expressions(action=JN.Pexpr, scope=scope) + self.expressions(action=JN.Peop2) + self.expressions(action=JN.Pexpr, scope=scope)
 
-        if action == "peop1":
+        if action == JN.Peop1:
 
-            return self.action_expressions.get_action(sub="peop1")
+            return self.action_expressions.get_action(sub=JN.Peop1)
 
-        if action == "peop2":
+        if action == JN.Peop2:
 
-            return self.action_expressions.get_action(sub="peop2")
+            return self.action_expressions.get_action(sub=JN.Peop2)
 
-        if action == "var" or action == "ident":
-
-            return "~some variable~"
+        if action == "var" or action == JN.Ident:
+            print(action)
+            return self.get_variable(scope)
 
     """
 
@@ -230,13 +280,15 @@ class JasminGenerator:
 
     def instructions(self, action=None):
 
+        print("Instruction  action ", action)
+
         if action is None:
 
             action = self.action_instructions.get_action()
 
-        if action == "pinstr":
+        if action == JN.Pinstr:
 
-            action = self.action_instructions.get_action(sub="pinstr")
+            action = self.action_instructions.get_action(sub=JN.Pinstr)
 
             if action == "arrayinit":
 
@@ -244,39 +296,39 @@ class JasminGenerator:
 
             if action == "if":
 
-                return "if " + self.expressions(action="pexpr") + self.instructions(action="pblock")
+                return "if " + self.expressions(action=JN.Pexpr) + self.instructions(action=JN.Pblock)
 
             if action == "ifelse":
 
-                return "if " + self.expressions(action="pexpr") + self.instructions(action="pblock") \
-                        + " else " + self.instructions(action="pblock")
+                return "if " + self.expressions(action=JN.Pexpr) + self.instructions(action=JN.Pblock) \
+                        + " else " + self.instructions(action=JN.Pblock)
 
             if action == "forto":
 
-                return "for " + self.expressions(action="var") + " = " + self.expressions(action="pexpr") + " to "\
-                        + self.expressions(action="pexpr") + self.instructions(action="pblock")
+                return "for " + self.expressions(action="var") + " = " + self.expressions(action=JN.Pexpr) + " to "\
+                        + self.expressions(action=JN.Pexpr) + self.instructions(action=JN.Pblock)
 
             if action == "fordown":
 
-                return "for " + self.expressions(action="var") + " = " + self.expressions(action="pexpr") + " downto " \
-                        + self.expressions(action="pexpr") + self.instructions(action="pblock")
+                return "for " + self.expressions(action="var") + " = " + self.expressions(action=JN.Pexpr) + " downto " \
+                        + self.expressions(action=JN.Pexpr) + self.instructions(action=JN.Pblock)
 
             if action == "while":
 
-                return "while " + self.instructions(action="pblock") + "{\n" + self.expressions(action="pexpr") + "}" \
-                        + self.instructions(action="pblock")
+                return "while " + self.instructions(action=JN.Pblock) + "{\n" + self.expressions(action=JN.Pexpr, scope=JS.Variables) + "\n}" \
+                        + self.instructions(action=JN.Pblock)
 
-        if action == "pblock":
+        if action == JN.Peqop:
 
             return "(<var><peqop><var>)"  #TODO make such that it return <var><peqop><var>
 
-        if action == "peqop":
+        if action == JN.Pblock:
 
-            return self.action_instructions.get_action(sub="peqop")
+            return "PBLOCK"  #self.instructions(action=JN.Peqop)
 
-        if action == "plvalue":
+        if action == JN.Plvalue:
 
-            action = self.action_instructions.get_action(sub="plvalue")
+            action = self.action_instructions.get_action(sub=JN.Plvalue)
 
             if action == "_":
 
@@ -288,7 +340,7 @@ class JasminGenerator:
 
             if action == "array":
 
-                return self.expressions(action="var") + "[" + self.expressions(action="pexpr") + "]"
+                return self.expressions(action="var") + "[" + self.expressions(action=JN.Pexpr) + "]"
 
     """
     
@@ -302,21 +354,21 @@ class JasminGenerator:
 
             action = self.action_functions.get_action()
 
-        if action == "pfunbody":
+        if action == JN.Pfunbody:
 
-            return "{\n" + self.functions(action="pvardecl") + self.instructions("pinstr") + "\nreturn " + self.functions(action="return") + ";\n}"
+            return "{\n" + self.functions(action=JN.Pvardecl) + self.instructions(JN.Pinstr) + "\nreturn " + self.functions(action="return") + ";\n}"
 
-        if action == "storage":
+        if action == JN.Storage:
 
-            return self.action_functions.get_action(sub="storage")
+            return self.action_functions.get_action(sub=JN.Storage)
 
-        if action == "stor_type":
+        if action == JN.Stor_type:
 
-            return self.functions(action="storage") + " " + self.types(action="ptype")
+            return self.functions(action=JN.Storage) + " " + self.types(action=JN.Ptype)
 
-        if action == "pvardecl":
+        if action == JN.Pvardecl:
 
-            return self.functions(action="stor_type") + " " + self.expressions(action="var") + ";\n"
+            return self.functions(action=JN.Stor_type) + " " + self.expressions(action="var", scope=JS.Decl) + ";\n"
 
         if action == "return":
 
@@ -324,7 +376,7 @@ class JasminGenerator:
 
     """
     
-        TYPESS
+        TYPES
     
     """
 
@@ -334,9 +386,9 @@ class JasminGenerator:
 
             action = self.action_types.get_action()
 
-        if action == "ptype":
+        if action == JN.Ptype:
 
-            action = self.action_types.get_action(sub="ptype")
+            action = self.action_types.get_action(sub=JN.Ptype)
 
             if action == "bool":
 
@@ -346,18 +398,17 @@ class JasminGenerator:
 
                 return "int"
 
-            if action == "utype":
+            if action == JN.Utype:
 
-                return self.types(action="utype")
+                return self.types(action=JN.Utype)
 
-            else:
+            if action == "array":
 
-                return self.types(action="utype") + self.types(action="utype") + "[" + self.expressions(action="pexpr") + "]"
+                return self.types(action=JN.Utype) + "[" + self.expressions(action=JN.Pexpr) + "]"
 
+        if action == JN.Utype:
 
-        else:
-
-            return  self.action_types.get_action(sub="utype")
+            return self.action_types.get_action(sub=JN.Utype)
 
 
 
