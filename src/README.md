@@ -1,3 +1,13 @@
+# Note to Josef
+
+
+Det kunne være nice hvis vi kan  få følgende funktionalitet:
+
+At sandsynlighederne i jasminDistribution.py kan loades in fra en jason fil.
+Der skal ligeledes også laves en funktionalitet der kan lave disse filer... 
+Lav gerne en ny branch til det virker :D
+
+
 # Implementation nodes
 
 In the following any shortcomings or bugs in the implementation should be noted
