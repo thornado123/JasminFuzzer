@@ -40,7 +40,7 @@ class Functions:
 
         }
 
-    def get_action(self, sub=None):
+    def get_action(self, sub=None, r_depth=0):
 
         if sub is not None:
 
@@ -97,9 +97,7 @@ class Instructions:
 
         }
 
-
-
-    def get_action(self, sub=None):
+    def get_action(self, sub=None, r_depth=0):
 
         if sub is not None:
 
@@ -143,9 +141,7 @@ class Types:
 
         }
 
-
-
-    def get_action(self, sub=None):
+    def get_action(self, sub=None, r_depth=0):
 
         if sub is not None:
 
@@ -168,7 +164,6 @@ class Expressions:
             JN.Peop1: 0.0,
             JN.Peop2: 0.0
         }
-
 
         self.sub_actions = {
 
@@ -210,7 +205,7 @@ class Expressions:
 
         }
 
-    def get_action(self, sub=None):
+    def get_action(self, sub=None, r_depth=0):
 
         if sub is not None:
 
@@ -254,7 +249,7 @@ class GlobalDeclarations:
 
         }
 
-    def get_action(self, sub=None):
+    def get_action(self, sub=None, r_depth=0):
 
         if sub is not None:
 
@@ -263,7 +258,3 @@ class GlobalDeclarations:
         else:
 
             return draw_from_dist(self.actions, self.seed)
-
-
-
-
