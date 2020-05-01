@@ -83,7 +83,6 @@ from jasminScopes import Scopes as JS
 from datetime import datetime
 
 
-
 class JasminGenerator:
 
     def __init__(self, program_seed):
@@ -94,6 +93,8 @@ class JasminGenerator:
         self.action_functions   = JD.Functions(self.seed)
         self.action_expressions = JD.Expressions(self.seed)
         self.action_instructions= JD.Instructions(self.seed)
+
+        self.function_return = False
 
         self.variables = {
 
@@ -168,7 +169,9 @@ class JasminGenerator:
 
             action = self.action_global.get_action()
 
-        if action == JN.Module:
+            return self.global_declarations(action=action)
+
+        elif action == JN.Module:
 
             action = self.action_global.get_action(JN.Module)
 
@@ -180,7 +183,7 @@ class JasminGenerator:
 
                 return "error"
 
-        if action == JN.Top:
+        elif action == JN.Top:
 
             action = self.action_global.get_action(JN.Top)
 
@@ -196,7 +199,7 @@ class JasminGenerator:
 
                 return self.global_declarations(JN.Pglobal)
 
-        if action == JN.Call_conv:
+        elif action == JN.Call_conv:
 
             action = self.action_global.get_action(JN.Call_conv)
 
@@ -208,23 +211,40 @@ class JasminGenerator:
 
                 return "inline"  # inline is default
 
-        if action == JN.Pfundef:
+        elif action == JN.Pfundef:
 
-            return self.global_declarations(action=JN.Call_conv) + " fn " \
-                    + self.expressions(action=JN.Ident, scope=JS.Function_name, r_depth=0) + "(" \
-                    + self.functions(action=JN.Stor_type, r_depth=0) + " "\
-                    + self.expressions(action="var", scope=JS.Decl, r_depth=0) + ") -> " \
-                    + self.functions(action=JN.Stor_type, r_depth=0) \
-                    + self.functions(action=JN.Pfunbody, r_depth=0)
+            result = ""
+            decl = self.global_declarations(action=JN.Call_conv)
 
-        if action == JN.Param:
+            if decl != "inline":
+                result += decl + " "
+
+            function_name = self.expressions(action=JN.Ident, scope=JS.Function_name, r_depth=0)
+
+            result += "fn " + function_name + "(" \
+                      + self.functions(action=JN.Stor_type, r_depth=0) + " "\
+                      + self.expressions(action="var", scope=JS.Decl, r_depth=0) + ")"
+
+            if self.action_functions.get_action(sub="return"):
+                result += " -> " + self.functions(action=JN.Stor_type, r_depth=0)
+                self.function_return = True
+
+            result += self.functions(action=JN.Pfunbody, r_depth=0)
+
+            return result
+
+        elif action == JN.Param:
 
             return JN.Param + self.types(action=JN.Ptype) + self.expressions(action=JN.Ident, r_depth=0)\
                    + " = " + self.expressions(action=JN.Pexpr, r_depth=0)
 
-        if action == JN.Pglobal:
+        elif action == JN.Pglobal:
 
             return self.expressions(action=JN.Ident, r_depth=0) + " = " + self.expressions(action=JN.Pexpr, r_depth=0)
+
+        else:
+
+            raise Exception("GLOBAL DECLARATION NO MATCH")
 
     """
     
@@ -236,9 +256,9 @@ class JasminGenerator:
 
     def expressions(self, action=None, scope=None, r_depth=0):
 
-        if action is None:
+        print("Expression", r_depth, "->", action, scope)
 
-            action = self.action_expressions.get_action(r_depth=r_depth)
+        r_depth = r_depth+1
 
         if action == JN.Pexpr:
 
@@ -273,7 +293,7 @@ class JasminGenerator:
             if action == "exp":
 
                 return self.expressions(action=JN.Pexpr, scope=scope, r_depth=r_depth) \
-                       + self.expressions(action=JN.Peop2, r_depth=r_depth)\
+                       + self.expressions(action=JN.Peop2, scope=scope, r_depth=r_depth)\
                        + self.expressions(action=JN.Pexpr, scope=scope, r_depth=r_depth)
 
         if action == JN.Peop1:
@@ -282,11 +302,13 @@ class JasminGenerator:
 
         if action == JN.Peop2:
 
-            return self.action_expressions.get_action(sub=JN.Peop2, r_depth=r_depth)
+            return self.action_expressions.get_action(sub=JN.Peop2)
 
         if action == "var" or action == JN.Ident:
 
             return self.get_variable(scope)
+
+        raise Exception("EXPRESSION NO MATCH")
 
     """
 
@@ -294,13 +316,9 @@ class JasminGenerator:
 
     """
 
-    def instructions(self, action=None, r_depth=0):
+    def instructions(self, action=None, r_depth=0, scope=None):
 
-        print("Instruction  action ", action)
-
-        if action is None:
-
-            action = self.action_instructions.get_action(r_depth=r_depth)
+        print("Instruction", r_depth, "->", action, scope)
 
         if action == JN.Pinstr:
 
@@ -310,36 +328,48 @@ class JasminGenerator:
 
                 return "arrayinit"  #TODO what is arrayinit?
 
+            if action == "assign":
+
+                return self.instructions(action=JN.Plvalue, r_depth=r_depth, scope=scope)\
+                       + self.instructions(action=JN.Peqop)\
+                       + self.expressions(action=JN.Pexpr, scope=scope) + ";"
+
             if action == "if":
 
-                return "if " + self.expressions(action=JN.Pexpr, r_depth=r_depth) \
-                       + self.instructions(action=JN.Pblock, r_depth=r_depth)
+                return "if " + self.expressions(action=JN.Pexpr, scope=scope, r_depth=r_depth) \
+                       + self.instructions(action=JN.Pblock, scope=scope, r_depth=r_depth)
 
             if action == "ifelse":
 
-                return "if " + self.expressions(action=JN.Pexpr, r_depth=r_depth)\
-                       + self.instructions(action=JN.Pblock, r_depth=r_depth) \
-                       + " else " + self.instructions(action=JN.Pblock, r_depth=r_depth)
+                return "if " + self.expressions(action=JN.Pexpr, scope=scope, r_depth=r_depth)\
+                       + self.instructions(action=JN.Pblock, r_depth=r_depth, scope=scope) \
+                       + " else " + self.instructions(action=JN.Pblock, r_depth=r_depth, scope=scope)
 
             if action == "forto":
 
-                return "for " + self.expressions(action="var", r_depth=r_depth) + " = "\
-                       + self.expressions(action=JN.Pexpr, r_depth=r_depth) + " to " \
-                       + self.expressions(action=JN.Pexpr, r_depth=r_depth) \
-                       + self.instructions(action=JN.Pblock, r_depth=r_depth)
+                return "for " + self.expressions(action="var", r_depth=r_depth, scope=scope) + " = "\
+                       + self.expressions(action=JN.Pexpr, scope=scope, r_depth=r_depth) + " to " \
+                       + self.expressions(action=JN.Pexpr, scope=scope, r_depth=r_depth) \
+                       + self.instructions(action=JN.Pblock, r_depth=r_depth, scope=scope)
 
             if action == "fordown":
 
-                return "for " + self.expressions(action="var", r_depth=r_depth) + " = " \
-                       + self.expressions(action=JN.Pexpr, r_depth=r_depth) + " downto " \
-                       + self.expressions(action=JN.Pexpr, r_depth=r_depth)\
-                       + self.instructions(action=JN.Pblock, r_depth=r_depth)
+                return "for " + self.expressions(action="var", r_depth=r_depth, scope=scope) + " = " \
+                       + self.expressions(action=JN.Pexpr, r_depth=r_depth, scope=scope) + " downto " \
+                       + self.expressions(action=JN.Pexpr, r_depth=r_depth, scope=scope)\
+                       + self.instructions(action=JN.Pblock, r_depth=r_depth, scope=scope)
 
             if action == "while":
 
-                return "while " + self.instructions(action=JN.Pblock, r_depth=r_depth) + "{\n" \
-                       + self.expressions(action=JN.Pexpr, scope=JS.Variables, r_depth=r_depth) + "\n}" \
-                       + self.instructions(action=JN.Pblock, r_depth=r_depth)
+                start_end = self.action_instructions.get_action(sub="while")
+                result = "while "
+                if start_end:
+                    result += self.instructions(action=JN.Pblock, r_depth=r_depth, scope=scope)
+                result += "(" + self.expressions(action=JN.Pexpr, scope=scope, r_depth=r_depth) + ")"
+                if not start_end:
+                    result += self.instructions(action=JN.Pblock, r_depth=r_depth, scope=scope)
+
+                return result
 
         if action == JN.Peqop:
 
@@ -347,7 +377,7 @@ class JasminGenerator:
 
         if action == JN.Pblock:
 
-            return "PBLOCK"  #self.instructions(action=JN.Peqop)
+            return "\n{\n" + self.instructions(action=JN.Pinstr, scope=scope, r_depth=r_depth) + "\n}\n"  #self.instructions(action=JN.Peqop)
 
         if action == JN.Plvalue:
 
@@ -366,6 +396,8 @@ class JasminGenerator:
                 return self.expressions(action="var", r_depth=r_depth) + "[" \
                        + self.expressions(action=JN.Pexpr, r_depth=r_depth) + "]"
 
+        raise Exception("INSTRUCTION NO MATCH")
+
     """
     
         FUNCTIONS
@@ -374,15 +406,22 @@ class JasminGenerator:
 
     def functions(self, action=None, r_depth=0):
 
-        if action is None:
+        print("Func: ", r_depth, "->", action)
 
-            action = self.action_functions.get_action()
+        r_depth = r_depth + 1
 
         if action == JN.Pfunbody:
 
-            return "{\n" + self.functions(action=JN.Pvardecl, r_depth=r_depth)\
-                   + self.instructions(JN.Pinstr, r_depth=r_depth) + "\nreturn "\
-                   + self.functions(action="return", r_depth=r_depth) + ";\n}"
+            result = "{\n" + self.functions(action=JN.Pvardecl, r_depth=r_depth)\
+                   + self.instructions(JN.Pinstr, r_depth=r_depth, scope=JS.Variables) + "\n"
+
+            if self.function_return:
+
+                result += "return " + self.functions(action="return", r_depth=r_depth) + ";"
+
+                self.function_return = False
+
+            return result + "\n}"
 
         if action == JN.Storage:
 
@@ -402,6 +441,8 @@ class JasminGenerator:
 
             return "return_variable"  # can be a tuple
 
+        raise Exception("FUNCTION NO MATCH")
+
     """
     
         TYPES
@@ -410,9 +451,7 @@ class JasminGenerator:
 
     def types(self, action=None, r_depth=0):
 
-        if action is None:
-
-            action = self.action_types.get_action()
+        r_depth = r_depth + 1
 
         if action == JN.Ptype:
 
@@ -439,7 +478,7 @@ class JasminGenerator:
 
             return self.action_types.get_action(sub=JN.Utype, r_depth=r_depth)
 
-
+        raise Exception("TYPE NO MATCH")
 
 
 

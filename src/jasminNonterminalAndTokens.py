@@ -59,3 +59,12 @@ class Nonterminals(enum.Enum):
     Pfundef     = "pfundef"
     Param       = "param"
     Pglobal     = "pglobal"
+
+
+class Tokens(enum.Enum):
+
+    If      = "if"
+    Else    = "else"
+    For     = "for"
+    While   = "while"
+    To      = "to"

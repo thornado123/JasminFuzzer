@@ -36,11 +36,20 @@ class Functions:
                 "reg": 0.8,
                 "stack": 0.1,
                 "inline": 0.1
+            },
+
+            "return" : {
+
+                True : 0.8,
+                False: 0.2
+
             }
 
         }
 
     def get_action(self, sub=None, r_depth=0):
+
+        self.seed += 1
 
         if sub is not None:
 
@@ -66,12 +75,13 @@ class Instructions:
 
             JN.Pinstr : {
 
-                "arrayinit" : 0.1,  # ARRAYINIT ⟨parens⟨var⟩⟩ ;
+                "arrayinit" : 0.1,
+                "assign"    : 0.05,
                 "if"        : 0.1,
                 "ifelse"    : 0.1,
-                #"forto"     : 0.1,
-                #"fordown"   : 0.1,
-                "while"     : 0.7
+                "forto"     : 0.1,
+                "fordown"   : 0.05,
+                "while"     : 0.5
             },
 
             JN.Peqop: {
@@ -93,11 +103,19 @@ class Instructions:
                 "var"   : 0.5,
                 "array" : 0.3
 
+            },
+
+            "while" : {
+
+                True : 0.5,
+                False: 0.5,
             }
 
         }
 
     def get_action(self, sub=None, r_depth=0):
+
+        self.seed += 1
 
         if sub is not None:
 
@@ -143,6 +161,8 @@ class Types:
 
     def get_action(self, sub=None, r_depth=0):
 
+        self.seed += 1
+
         if sub is not None:
 
             return draw_from_dist(self.sub_actions[sub], self.seed)
@@ -162,7 +182,8 @@ class Expressions:
             JN.Var  : 0.0,
             JN.Prim : 0.0,
             JN.Peop1: 0.0,
-            JN.Peop2: 0.0
+            JN.Peop2: 0.0,
+            JN.Plvalue: 0.0
         }
 
         self.sub_actions = {
@@ -174,8 +195,8 @@ class Expressions:
                 "int"   : 0.05,  # INT
                 "var"   : 0.25,  # var
                 "array" : 0.1,  # <var>[<pexpr>]
-                "negvar": 0.1,  # < peop1 > < pexpr >
-                "exp"   : 0.4,  # < pexpr > < peop2 > < pexpr >
+                "negvar": 0.05,  # < peop1 > < pexpr >
+                "exp"   : 0.45,  # < pexpr > < peop2 > < pexpr > should deteriorate
             },
 
             JN.Peop1: {
@@ -207,6 +228,8 @@ class Expressions:
 
     def get_action(self, sub=None, r_depth=0):
 
+        self.seed += 1
+
         if sub is not None:
 
             return draw_from_dist(self.sub_actions[sub], self.seed)
@@ -232,14 +255,14 @@ class GlobalDeclarations:
         self.sub_actions = {
 
             JN.Module : {
-                "top" : 0.5,
+                JN.Top : 0.5,
                 "error" : 0.5,
             },
 
             JN.Top : {
-                "pfundef":   0.75,
-                "pparam":    0.07,
-                "pglobal":   0.18
+                JN.Pfundef:   0.75,
+                JN.Param  :    0.07,
+                JN.Pglobal:   0.18
             },
 
             JN.Call_conv : {
@@ -250,6 +273,8 @@ class GlobalDeclarations:
         }
 
     def get_action(self, sub=None, r_depth=0):
+
+        self.seed += 1
 
         if sub is not None:
 
