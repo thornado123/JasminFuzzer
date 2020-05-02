@@ -47,6 +47,14 @@ class Functions:
 
         }
 
+    def get_amount_of_decls(self):
+
+        return np.random.randint(low=0, high=10, size=1)[0]
+
+    def get_amount_of_instructions(self):
+
+        return np.random.randint(low=0, high=2, size=1)[0]
+
     def get_action(self, sub=None, r_depth=0):
 
         self.seed += 1
@@ -75,13 +83,13 @@ class Instructions:
 
             JN.Pinstr : {
 
-                "arrayinit" : 0.1,
-                "assign"    : 0.05,
-                "if"        : 0.1,
+                "arrayinit" : 0.05,
+                "assign"    : 0.15,
+                "if"        : 0.15,
                 "ifelse"    : 0.1,
-                "forto"     : 0.1,
-                "fordown"   : 0.05,
-                "while"     : 0.5
+                "forto"     : 0.15,
+                "fordown"   : 0.1,
+                "while"     : 0.3
             },
 
             JN.Peqop: {
@@ -192,11 +200,11 @@ class Expressions:
 
                 "true"  : 0.05,  # TRUE
                 "false" : 0.05,  # FALSE
-                "int"   : 0.05,  # INT
+                "int"   : 0.1,  # INT
                 "var"   : 0.25,  # var
                 "array" : 0.1,  # <var>[<pexpr>]
-                "negvar": 0.05,  # < peop1 > < pexpr >
-                "exp"   : 0.45,  # < pexpr > < peop2 > < pexpr > should deteriorate
+                "negvar": 0.15,  # < peop1 > < pexpr >
+                "exp"   : 0.3,  # < pexpr > < peop2 > < pexpr > should deteriorate
             },
 
             JN.Peop1: {

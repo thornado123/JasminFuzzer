@@ -274,7 +274,7 @@ class JasminGenerator:
 
             if action == "int":
 
-                return "int"
+                return str(32123)
 
             if action == "var":
 
@@ -373,11 +373,11 @@ class JasminGenerator:
 
         if action == JN.Peqop:
 
-            return "(<var><peqop><var>)"  #TODO make such that it return <var><peqop><var>
+            return self.action_instructions.get_action(sub=JN.Peqop)  #TODO make such that it return <var><peqop><var>
 
         if action == JN.Pblock:
 
-            return "\n{\n" + self.instructions(action=JN.Pinstr, scope=scope, r_depth=r_depth) + "\n}\n"  #self.instructions(action=JN.Peqop)
+            return "{\n" + self.instructions(action=JN.Pinstr, scope=scope, r_depth=r_depth) + "\n}"  #self.instructions(action=JN.Peqop)
 
         if action == JN.Plvalue:
 
@@ -389,12 +389,12 @@ class JasminGenerator:
 
             if action == "var":
 
-                return self.expressions(action="var", r_depth=r_depth)
+                return self.expressions(action="var", r_depth=r_depth, scope=scope)
 
             if action == "array":
 
-                return self.expressions(action="var", r_depth=r_depth) + "[" \
-                       + self.expressions(action=JN.Pexpr, r_depth=r_depth) + "]"
+                return self.expressions(action="var", r_depth=r_depth, scope=scope) + "[" \
+                       + self.expressions(action=JN.Pexpr, r_depth=r_depth, scope=scope) + "]"
 
         raise Exception("INSTRUCTION NO MATCH")
 
@@ -412,8 +412,15 @@ class JasminGenerator:
 
         if action == JN.Pfunbody:
 
-            result = "{\n" + self.functions(action=JN.Pvardecl, r_depth=r_depth)\
-                   + self.instructions(JN.Pinstr, r_depth=r_depth, scope=JS.Variables) + "\n"
+            result = "{\n"
+
+            for _ in range(self.action_functions.get_amount_of_decls()):
+
+                result += self.functions(action=JN.Pvardecl, r_depth=r_depth)
+
+            for _ in range(self.action_functions.get_amount_of_instructions()):
+
+                result += self.instructions(JN.Pinstr, r_depth=r_depth, scope=JS.Variables) + "\n"
 
             if self.function_return:
 
@@ -471,8 +478,8 @@ class JasminGenerator:
 
             if action == "array":
 
-                return self.types(action=JN.Utype, r_depth=r_depth) + "["\
-                       + self.expressions(action=JN.Pexpr, r_depth=r_depth) + "]"
+                return self.types(action=JN.Utype, r_depth=r_depth) + "[5]" #TODO should be somekind of int declearing the size
+                       #+ self.expressions(action=JN.Pexpr, r_depth=r_depth) + "]" #TODO should get int?!
 
         if action == JN.Utype:
 

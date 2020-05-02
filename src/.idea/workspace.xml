@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="90a82d82-ed5d-4841-9a20-5f9bbb41df80" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/jasminDistribution.py" beforeDir="false" afterPath="$PROJECT_DIR$/jasminDistribution.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jasminFuzzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/jasminFuzzer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jasminGenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/jasminGenerator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jasminNonterminalAndTokens.py" beforeDir="false" afterPath="$PROJECT_DIR$/jasminNonterminalAndTokens.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,8 +28,8 @@
             <file pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/jasminGenerator.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="423">
-                    <caret line="379" column="78" selection-start-line="379" selection-start-column="78" selection-end-line="379" selection-end-column="78" />
+                  <state relative-caret-position="643">
+                    <caret line="375" column="67" selection-start-line="375" selection-start-column="67" selection-end-line="375" selection-end-column="67" />
                   </state>
                 </provider>
               </entry>
@@ -51,8 +49,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/jasminDistribution.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1688">
-              <caret line="78" column="35" selection-start-line="78" selection-start-column="35" selection-end-line="78" selection-end-column="35" />
+            <state relative-caret-position="-177">
+              <caret line="72" column="29" lean-forward="true" selection-start-line="72" selection-start-column="29" selection-end-line="72" selection-end-column="29" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -99,6 +97,8 @@
       <find>Peqop</find>
       <find>pexpr</find>
       <find>pinstr</find>
+      <find>get_action</find>
+      <find>int</find>
     </findStrings>
     <replaceStrings>
       <replace>JN.Ptype</replace>
@@ -253,8 +253,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/jasminDistribution.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1688">
-          <caret line="78" column="35" selection-start-line="78" selection-start-column="35" selection-end-line="78" selection-end-column="35" />
+        <state relative-caret-position="-177">
+          <caret line="72" column="29" lean-forward="true" selection-start-line="72" selection-start-column="29" selection-end-line="72" selection-end-column="29" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -263,8 +263,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/jasminGenerator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="379" column="78" selection-start-line="379" selection-start-column="78" selection-end-line="379" selection-end-column="78" />
+        <state relative-caret-position="643">
+          <caret line="375" column="67" selection-start-line="375" selection-start-column="67" selection-end-line="375" selection-end-column="67" />
         </state>
       </provider>
     </entry>
