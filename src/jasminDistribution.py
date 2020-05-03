@@ -1,5 +1,7 @@
 import numpy as np
 from jasminNonterminalAndTokens import Nonterminals as JN
+from jasminTypes import JasminTypes as JT
+from jasminScopes import Scopes as JS
 
 
 def draw_from_dist(dist, seed):
@@ -8,13 +10,7 @@ def draw_from_dist(dist, seed):
     values  = list(dist.keys())
     probs   = list(dist.values())
 
-
-    #print(probs)
-    #print(values)
-
     val = np.random.choice(np.arange(len(probs)), p=probs)
-    #print(np.arange(len(probs)))
-    #print(val)
 
     return values[val]
 
@@ -33,9 +29,9 @@ class Functions:
         self.sub_actions = {
 
             JN.Storage : {
-                "reg": 0.8,
-                "stack": 0.1,
-                "inline": 0.1
+                "reg": 0.33,
+                "stack": 0.33,
+                "inline": 0.34
             },
 
             "return" : {
@@ -83,13 +79,13 @@ class Instructions:
 
             JN.Pinstr : {
 
-                "arrayinit" : 0.05,
-                "assign"    : 0.15,
+                "arrayinit" : 0.1,  #Non branching
+                "assign"    : 0.15, #Non branching
                 "if"        : 0.15,
-                "ifelse"    : 0.1,
+                "ifelse"    : 0.15,
                 "forto"     : 0.15,
-                "fordown"   : 0.1,
-                "while"     : 0.3
+                "fordown"   : 0.15,
+                "while"     : 0.15
             },
 
             JN.Peqop: {
@@ -108,7 +104,7 @@ class Instructions:
             JN.Plvalue : {
 
                 "_"     : 0.2,
-                "var"   : 0.5,
+                JN.Var  : 0.5,
                 "array" : 0.3
 
             },
@@ -147,22 +143,34 @@ class Types:
 
             JN.Utype : {
 
-                "u8" : 0.05,
-                "u16": 0.1,
-                "u32": 0.2,
-                "u64": 0.5,
-                "u128": 0.1,
-                "u256": 0.05
+                JT.U8 : 0.05,
+                JT.U16: 0.1,
+                JT.U32: 0.1,
+                JT.U64: 0.6,
+                JT.U128: 0.1,
+                JT.U256: 0.05
 
             },
 
             JN.Ptype : {
 
-                "bool": 0.1,
-                "int" : 0.1,
-                JN.Utype: 0.5,
-                "array": 0.3
+                JT.BOOL: 0.3,
+                JT.INT: 0.3,
+                JN.Utype: 0.3,
+                "array": 0.1
 
+            },
+
+            "eval_type" : {
+
+                JT.U8: 0.025,
+                JT.U16: 0.05,
+                JT.U32: 0.05,
+                JT.U64: 0.3,
+                JT.U128: 0.05,
+                JT.U256: 0.025,
+                JT.BOOL: 0.3,
+                JT.INT: 0.2
             }
 
         }
@@ -198,13 +206,22 @@ class Expressions:
 
             JN.Pexpr : {
 
-                "true"  : 0.05,  # TRUE
-                "false" : 0.05,  # FALSE
-                "int"   : 0.1,  # INT
-                "var"   : 0.25,  # var
-                "array" : 0.1,  # <var>[<pexpr>]
-                "negvar": 0.15,  # < peop1 > < pexpr >
-                "exp"   : 0.3,  # < pexpr > < peop2 > < pexpr > should deteriorate
+                "true"  : 0.1,  #Non branching
+                "false" : 0.1,  #Non branching
+                "int"   : 0.15, #Non branching
+                JN.Var   : 0.20, #Non branching
+                "array" : 0.15, #<var>[<pexpr>] should deteriorate
+                "negvar": 0.1,  #< peop1 > < pexpr > should deteriorate
+                "exp"   : 0.2,  # < pexpr > < peop2 > < pexpr > should deteriorate
+            },
+
+            JS.Number : {
+
+                "int": 0.4,  # Non branching
+                JN.Var: 0.35,  # Non branching
+                "array": 0.15,  # <var>[<pexpr>] should deteriorate
+                "negvar": 0.1  # < peop1 > < pexpr > should deteriorate
+
             },
 
             JN.Peop1: {
@@ -214,33 +231,48 @@ class Expressions:
 
             },
 
-            JN.Peop2: {
 
-                "+"     : 0.2,
-                "-"     : 0.2,
-                "*"     : 0.1,
-                "&&"    : 0.05,
+            "artemtic" : {
+                "+"     : 0.3,
+                "-"     : 0.3,
+                "*"     : 0.3,
+                "^"     : 0.1
+
+            },
+
+            "logic" : {
+
+                "&&"    : 1
+
+            },
+
+            "compare" : {
                 "&"     : 0.05,
-                "^"     : 0.02,
-                "<<"    : 0.04,
-                ">>"    : 0.04,
-                "=="    : 0.05,
-                "!="    : 0.05,
-                "<"     : 0.05,
-                "<="    : 0.05,
+                "<<"    : 0.1,
+                ">>"    : 0.15,
+                "=="    : 0.15,
+                "!="    : 0.15,
+                "<"     : 0.15,
+                "<="    : 0.15,
                 ">"     : 0.05,
                 ">="    : 0.05
-            }
 
+            }
         }
 
-    def get_action(self, sub=None, r_depth=0):
+    def get_action(self, sub=None, scope=None, r_depth=0):
 
         self.seed += 1
 
         if sub is not None:
 
-            return draw_from_dist(self.sub_actions[sub], self.seed)
+            if scope == JS.Number:
+
+                return draw_from_dist(self.sub_actions[JS.Number], self.seed)
+
+            else:
+
+                return draw_from_dist(self.sub_actions[sub], self.seed)
 
         else:
 
@@ -255,9 +287,9 @@ class GlobalDeclarations:
             JN.Module   : 0.01,
             JN.Top      : 0.25,
             JN.Call_conv: 0.0,
-            JN.Pfundef  : 0.5,
+            JN.Pfundef  : 0.4,
             JN.Param    : 0.1,
-            JN.Pglobal  : 0.14
+            JN.Pglobal  : 0.24
         }
 
         self.sub_actions = {
