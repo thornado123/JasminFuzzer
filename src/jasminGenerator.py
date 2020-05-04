@@ -339,7 +339,7 @@ class JasminGenerator:
 
                 else:
 
-                    return ["32123"]
+                    return ["32123"]  #TODO should be a random int
 
             if action == JN.Var:
 
@@ -486,7 +486,7 @@ class JasminGenerator:
 
                 if var_to_assign == "_":
 
-                    ev_type = self.action_types.get_action(sub="eval_type")
+                    ev_type = self.action_types.get_action(sub="assign_type")
 
                 else:
 

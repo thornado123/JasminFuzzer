@@ -171,6 +171,17 @@ class Types:
                 JT.U256: 0.025,
                 JT.BOOL: 0.3,
                 JT.INT: 0.2
+            },
+
+            "assign_type": {
+
+                JT.U8: 0.025,
+                JT.U16: 0.05,
+                JT.U32: 0.15,
+                JT.U64: 0.41,
+                JT.U128: 0.05,
+                JT.U256: 0.015,
+                JT.INT: 0.3
             }
 
         }
