@@ -103,8 +103,8 @@ class Instructions:
 
             JN.Plvalue : {
 
-                "_"     : 0.2,
-                JN.Var  : 0.5,
+                "_"     : 0.1,
+                JN.Var  : 0.6,
                 "array" : 0.3
 
             },
@@ -253,19 +253,19 @@ class Expressions:
 
             "logic" : {
 
-                "&&"    : 1
+                "&&"    : 0.95,
+                "&": 0.05
 
             },
 
             "compare" : {
-                "&"     : 0.05,
                 "<<"    : 0.1,
                 ">>"    : 0.15,
                 "=="    : 0.15,
                 "!="    : 0.15,
                 "<"     : 0.15,
                 "<="    : 0.15,
-                ">"     : 0.05,
+                ">"     : 0.1,
                 ">="    : 0.05
 
             }
@@ -317,8 +317,8 @@ class GlobalDeclarations:
             },
 
             JN.Call_conv : {
-                "export" : 0.2,
-                "inline" : 0.8
+                "export" : 0.5,
+                "inline" : 0.5
             }
 
         }
