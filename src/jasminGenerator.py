@@ -122,7 +122,53 @@ class JasminGenerator:
 
             program += self.global_declarations()
 
+        """
+            
+            Adding string rep. of the different types
+            
+        """
+
+        program = self.clean_types(program)
+
+        """
+        
+            Removing unused variables
+        
+        """
+
+        program = self.remove_unused_variables(program)
+
         return program
+
+    def clean_types(self, program_list):
+
+        for i in range(len(program_list)):
+
+            part =  program_list[i]
+
+            if isinstance(part, JT):
+
+                program_list[i] = part.name.lower()
+
+        return program_list
+
+    def remove_unused_variables(self, program_list):
+
+        for var in self.variable_types.keys():
+
+            if program_list.count(var) == 1:
+                if var == "v0":
+                    print("Special case v0")
+                else:
+                    index = program_list.index(var)
+                    program_list[index + 1] = ""
+                    program_list[index]     = ""
+                    program_list[index - 1] = ""
+                    program_list[index - 2] = ""
+                    program_list[index - 3] = ""
+                    program_list[index - 4] = ""
+
+        return program_list
 
     def get_variable(self, scope, evaluation_type=None):
 
@@ -133,12 +179,12 @@ class JasminGenerator:
             types_array = [x for x in self.variables[JS.Arrays] if self.variable_types[x] == evaluation_type]
 
             if len(types_array) == 0:
-
                 return None
 
             else:
 
-                return np.random.choice(types_array, 1, replace=False)
+                result = np.random.choice(types_array, 1, replace=False)
+                return result[0]
 
         if scope == JS.Variables:
 
@@ -178,21 +224,13 @@ class JasminGenerator:
 
         else:
 
-            if scope == JT.BOOL or scope == JT.INT:
-
-                if scope in self.variables_of_type:
-
-                    return np.random.choice(self.variables_of_type[scope], 1, replace=False)[0]
-
-                else:
-
-                    return None
-
-            else:
+            if scope in self.variables_of_type:
 
                 return np.random.choice(self.variables_of_type[scope], 1, replace=False)[0]
 
+            else:
 
+                return None
 
     """
     
@@ -334,7 +372,7 @@ class JasminGenerator:
         if action == JN.Pexpr:
 
             action = self.action_expressions.get_action(sub=JN.Pexpr, scope=scope, r_depth=r_depth)
-#            print("Pexpr ", action, scope)
+            #print("Pexpr ", action, scope)
 
             """
             
@@ -358,7 +396,7 @@ class JasminGenerator:
 
             if action == "int":
 
-                if r_depth == 1 and evaluation_type == JT.BOOL:
+                if evaluation_type == JT.BOOL:
 
                     return self.expressions(action=JN.Pexpr, scope=scope, evaluation_type=evaluation_type)
 
@@ -514,7 +552,7 @@ class JasminGenerator:
 
             if action == "assign":
 
-                var_to_assign  = self.instructions(action=JN.Plvalue, r_depth=r_depth, scope=JS.Variables)
+                var_to_assign = self.instructions(action=JN.Plvalue, r_depth=r_depth, scope=JS.Variables)
 
                 if var_to_assign == "_":
 
@@ -528,7 +566,8 @@ class JasminGenerator:
 
                     ev_type = self.variable_types[var_to_assign]
 
-                assign_op      = self.instructions(action=JN.Peqop)
+
+                assign_op      = self.instructions(action=JN.Peqop, scope=ev_type)
                 value_to_assign= self.expressions(action=JN.Pexpr, scope=JS.Variables, evaluation_type=ev_type)
 
                 if isinstance(var_to_assign, list):
@@ -545,7 +584,11 @@ class JasminGenerator:
             if action == "if":
 
                 result = ["if "]
-                result += self.expressions(action=JN.Pexpr, scope=JT.BOOL, evaluation_type=JT.BOOL, r_depth=r_depth)
+                condition = self.expressions(action=JN.Pexpr, scope=JT.BOOL, evaluation_type=JT.BOOL, r_depth=r_depth)
+                if isinstance(condition, list):
+                    result += condition
+                else:
+                    result.append(condition)
                 result += self.instructions(action=JN.Pblock, r_depth=r_depth, scope=JS.Variables)
 
                 return result
@@ -555,7 +598,7 @@ class JasminGenerator:
                 result = ["if "]
                 result += self.expressions(action=JN.Pexpr, scope=JT.BOOL, evaluation_type=JT.BOOL)
                 result += self.instructions(action=JN.Pblock, r_depth=r_depth, scope=JS.Variables)
-                result += " else "
+                result.append(" else ")
                 result += self.instructions(action=JN.Pblock, r_depth=r_depth, scope=JS.Variables)
 
                 return result
@@ -604,7 +647,11 @@ class JasminGenerator:
                     result += self.instructions(action=JN.Pblock, r_depth=r_depth, scope=JS.Variables)
 
                 result += "("
-                result += self.expressions(action=JN.Pexpr, evaluation_type=JT.BOOL, scope=JT.BOOL)
+                bool_exp = self.expressions(action=JN.Pexpr, evaluation_type=JT.BOOL, scope=JT.BOOL)
+                if isinstance(bool_exp, list):
+                    result += bool_exp
+                else:
+                    result.append(bool_exp)
                 result += ")"
 
                 if not start_end:
@@ -613,8 +660,10 @@ class JasminGenerator:
                 return result
 
         if action == JN.Peqop:
-
-            return self.action_instructions.get_action(sub=JN.Peqop)                                                    #TODO make such that it return <var><peqop><var>
+            if scope == JT.BOOL:
+                return self.action_instructions.get_action(sub="logic")
+            else:
+                return self.action_instructions.get_action(sub=JN.Peqop)                                                #TODO make such that it return <var><peqop><var>
 
         if action == JN.Pblock:
 
@@ -760,7 +809,7 @@ class JasminGenerator:
 
             if action == "array":
 
-                return [self.types(action=JN.Utype), "[5]"]         #TODO should be somekind of int declearing the size
+                return [self.types(action=JN.Utype), "[5]"]                                                             #TODO should be somekind of int declearing the size
 
         if action == JN.Utype:
 

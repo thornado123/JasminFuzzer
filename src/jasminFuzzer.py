@@ -3,10 +3,10 @@ import jasminGenerator as JPG
 
 def main():
 
-    program_generator = JPG.JasminGenerator(25)
+    program_generator = JPG.JasminGenerator(1)
     out = program_generator.get_program()
 
-    out = [str(x) for x in  out]
+    out = [str(x) for x in out]
     print(out)
     out = "".join(out)
     print(out)
