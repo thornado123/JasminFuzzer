@@ -1,7 +1,7 @@
 import os
 import json
 from jasminTypes import JasminTypes
-from jasminNonterminalAndTokens import Tokens
+from jasminNonterminalAndTokens import Nonterminals, Tokens
 from jasminScopes import Scopes
 
 #The remaining are for testing purposes
@@ -14,7 +14,7 @@ def populate_dict(_dict, *enumerators):
 
 enum_to_name = {}
 
-populate_dict(enum_to_name, JasminTypes, Tokens)
+populate_dict(enum_to_name, JasminTypes, Nonterminals, Tokens, Scopes)
 
 name_to_enum = {val:key for key,val in enum_to_name.items()}
 
