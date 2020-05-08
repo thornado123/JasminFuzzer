@@ -1,44 +1,58 @@
 import os
 import json
-from jasminDistribution import Instructions
+from jasminTypes import JasminTypes
+from jasminNonterminalAndTokens import Tokens
+from jasminScopes import Scopes
 
-class JsonSerializer:
-    def __init__(self):
-        self.json_path = json_path = os.getcwd()+"/json/"
+#The remaining are for testing purposes
+from jasminDistribution import Instructions, Types
 
-    def json_to_obj(self, json_file, class_ref, *init_args):
-        obj = class_ref(*init_args)
-        FILE = self.json_path + json_file
+def populate_dict(_dict, *enumerators):
+    for enumerator in enumerators:
+        for elem in enumerator:
+            _dict[elem] = elem.name
 
-        with open(FILE, 'r') as f:
-            obj_dict = (json.load(f))
+enum_to_name = {}
 
-        obj.__dict__ = obj_dict
+populate_dict(enum_to_name, JasminTypes, Tokens)
 
-        return obj
+name_to_enum = {val:key for key,val in enum_to_name.items()}
 
-    # NOT IN USE
-    def obj_to_json(self, json_file, obj):
-        data = obj.__dict__
-        FILE = self.json_path + json_file
-        with open(FILE, 'w') as f:
-            json.dump(data, f, indent = 4)
+#print(token_dict)
 
-    def dist_to_json(self, fields):
-        pass
-    
-json_file = 'test.json'
+# Replaces keys in 'dict_to_replace' with the corresponding values from 'dict_replacer'
+def replace_recurse(dict_to_replace, dict_replacer):
+    new_dict = {}
+    for key, value in dict_to_replace.items():
+        replaced_key = key
+        replaced_value = value
 
-JS = JsonSerializer()
-ins = Instructions(42)
-JS.obj_to_json(json_file, ins)
+        if isinstance(value, dict):
+            replaced_value = replace_recurse(value, dict_replacer)
+        if key in dict_replacer:
+            replaced_key = dict_replacer[key]
 
+        new_dict[replaced_key] = replaced_value
+    return new_dict
 
-obj = JS.json_to_obj(json_file, Instructions, 2)
+def replace_enums_with_names(D):
+    return replace_recurse(D, enum_to_name)
 
-print(ins.__dict__ == obj.__dict__)
-print(ins.__dict__)
-print()
-print(obj.__dict__)
-A = [obj.__dict__[key] == val for key, val in ins.__dict__.items()]
-print(A)
+def replace_names_with_enums(D):
+    return replace_recurse(D, name_to_enum)
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+def obj_to_json(file_name, obj):
+    json_data = replace_enums_with_names(obj.__dict__)
+    file_name = f'{dir_path}/json/{file_name}'
+    with open(file_name, 'w') as FILE:
+        json.dump(json_data, FILE, indent = 4)
+
+def json_to_obj(file_name, class_ref, *class_args):
+    obj = class_ref(*class_args)
+    file_name = f'{dir_path}/json/{file_name}'
+    with open(file_name, 'r') as FILE:
+        raw_json_dict = json.load(FILE)
+        data_dict = replace_names_with_enums(raw_json_dict)
+    obj.__dict__ = data_dict
+    return obj
