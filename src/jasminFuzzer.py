@@ -3,7 +3,7 @@ import jasminGenerator as JPG
 
 def main():
 
-    program_generator = JPG.JasminGenerator(1)
+    program_generator = JPG.JasminGenerator(2)
     out = program_generator.get_program()
 
     out = [str(x) for x in out]
