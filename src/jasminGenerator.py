@@ -312,7 +312,8 @@ class JasminGenerator:
             input_param     = self.expressions(action=JN.Var, scope=JS.Decl, r_depth=0)
             input_param_type= self.functions(action=JN.Stor_type, r_depth=0)
 
-            if len(input_param_type) >= 3:
+            if len(input_param_type) > 3:
+
                 self.variables[JS.Arrays].append(input_param)
 
 
@@ -563,8 +564,6 @@ class JasminGenerator:
 
     def instructions(self, action=None, r_depth=0, scope=None):
 
-        #print("Instruction", r_depth, "->", action, scope)
-
         if action == JN.Pinstr:
 
             action = self.action_instructions.get_action(sub=JN.Pinstr, r_depth=r_depth)
@@ -699,7 +698,6 @@ class JasminGenerator:
         if action == JN.Plvalue:
 
             action = self.action_instructions.get_action(sub=JN.Plvalue, r_depth=r_depth)
-           # print(action)
             if action == "_":
 
                 return "_"
@@ -709,6 +707,7 @@ class JasminGenerator:
                 return self.expressions(action=JN.Var, r_depth=r_depth, scope=scope)
 
             if action == "array":
+
                 var     = self.expressions(action=JN.Var, r_depth=r_depth, scope=scope)
                 index   = self.expressions(action=JN.Pexpr, r_depth=r_depth, scope=JT.INT, evaluation_type=JT.INT)
 
@@ -728,7 +727,6 @@ class JasminGenerator:
 
     def functions(self, action=None, r_depth=0):
 
-        #print("Func: ", r_depth, "->", action)
 
         r_depth = r_depth + 1
 
@@ -790,7 +788,7 @@ class JasminGenerator:
             self.variable_types[variable] = var_type
 
             if len(stor_type) > 3:
-
+                print("791", variable)
                 self.variables[JS.Arrays].append(variable)
 
             if var_type in self.variables_of_type:
