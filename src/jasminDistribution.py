@@ -288,6 +288,26 @@ class Expressions:
 
                 return draw_from_dist(self.sub_actions[JS.Number], self.seed)
 
+            elif sub == JN.Pexpr:
+
+                if r_depth == 5:
+
+                    return JN.Var
+
+                elif r_depth > 5:
+
+                    if scope == JS.Bool:
+
+                        return np.random.choice(["true","false"], 1, replace=False)[0]
+
+                    else:
+
+                        return "int"
+
+                else:
+
+                    return draw_from_dist(self.sub_actions[sub], self.seed)
+
             else:
 
                 return draw_from_dist(self.sub_actions[sub], self.seed)

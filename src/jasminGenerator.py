@@ -333,7 +333,10 @@ class JasminGenerator:
                 return_var_type = self.variable_types[return_var]
 
                 if return_var in self.variables[JS.Arrays]:
-                    result[15] = "[5]" + result[15]
+                    index = 15
+                    if "v0" in self.variables[JS.Arrays]:
+                        index += 1
+                    result[index] = "[5]" + result[index]
 
                 result[14] = return_var_type
                 result[-3] = return_var
@@ -376,6 +379,7 @@ class JasminGenerator:
 #     print("Expression", r_depth, "->", action, " scope ", scope, "ev type", evaluation_type)
 
         r_depth = r_depth + 1
+        #print(r_depth)
 
         if action == JN.Pexpr:
 
@@ -414,10 +418,10 @@ class JasminGenerator:
 
             if action == JN.Var:
                # print("JN Var: ", scope)
+
                 result = self.expressions(action=JN.Var, scope=scope, r_depth=r_depth)
 
                 if result is None:
-
                     return self.expressions(action=JN.Pexpr, scope=scope, evaluation_type=evaluation_type, r_depth=r_depth)
 
                 else:
