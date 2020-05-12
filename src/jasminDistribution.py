@@ -67,6 +67,10 @@ class Functions:
 class Instructions:
 
     def __init__(self, seed):
+
+        self.h      = 4
+        self.n      = 3.5
+
         self.seed = seed
         self.actions = {
             JN.Pinstr : 1,
@@ -79,8 +83,8 @@ class Instructions:
 
             JN.Pinstr : {
 
-                "arrayinit" : 0.1,  #Non branching
-                "assign"    : 0.15, #Non branching
+                #"arrayinit" : 0.1,  #Non branching
+                "assign"    : 0.25, #Non branching
                 "if"        : 0.15,
                 "ifelse"    : 0.15,
                 "forto"     : 0.15,
@@ -124,13 +128,47 @@ class Instructions:
 
         }
 
+    def recursive_prob(self, r_depth):
+
+        return r_depth**self.n / (r_depth**self.n + self.h**self.n)
+
     def get_action(self, sub=None, r_depth=0):
 
         self.seed += 1
 
         if sub is not None:
 
-            return draw_from_dist(self.sub_actions[sub], self.seed)
+            if sub == JN.Pinstr:
+
+                """
+    
+                    Using the hill function f(x) = l^n/(h^n + l^n) for determining the rejection prob of another 
+                    recursive call 
+    
+                """
+
+                action = draw_from_dist(self.sub_actions[JN.Pinstr], self.seed)
+                rejection_prob = self.recursive_prob(r_depth)
+
+                if action in ["if", "ifelse", "forto", "fordown", "while"]:
+
+                    reject = np.random.choice([True, False], p=[rejection_prob, 1 - rejection_prob])
+
+                    if reject:
+
+                        return self.get_action(sub=sub, r_depth=r_depth)
+
+                    else:
+
+                        return action
+
+                else:
+
+                    return action
+
+            else:
+
+                return draw_from_dist(self.sub_actions[sub], self.seed)
 
         else:
 
@@ -209,8 +247,12 @@ class Types:
 class Expressions:
 
     def __init__(self, seed):
-        self.seed = seed
-        self.actions = {
+
+        self.h      = 4
+        self.n      = 3.5
+
+        self.seed   = seed
+        self.actions= {
             JN.Pexpr: 1.0,
             JN.Ident: 0.0,
             JN.Var  : 0.0,
@@ -278,6 +320,10 @@ class Expressions:
             }
         }
 
+    def recursive_prob(self, r_depth):
+
+        return r_depth**self.n / (r_depth**self.n + self.h**self.n)
+
     def get_action(self, sub=None, scope=None, r_depth=0):
 
         self.seed += 1
@@ -290,23 +336,31 @@ class Expressions:
 
             elif sub == JN.Pexpr:
 
-                if r_depth == 5:
+                """
+                
+                    Using the hill function f(x) = l^n/(h^n + l^n) for determining the rejection prob of another 
+                    recursive call 
+                 
+                """
 
-                    return JN.Var
+                action          = draw_from_dist(self.sub_actions[JN.Pexpr], self.seed)
+                rejection_prob  = self.recursive_prob(r_depth)
 
-                elif r_depth > 5:
+                if action in ["array", "negvar", "exp"]:
 
-                    if scope == JS.Bool:
+                    reject = np.random.choice([True, False], p=[rejection_prob, 1-rejection_prob])
 
-                        return np.random.choice(["true","false"], 1, replace=False)[0]
+                    if reject:
+
+                        return self.get_action(sub=sub, scope=scope, r_depth=r_depth)
 
                     else:
 
-                        return "int"
+                        return action
 
                 else:
 
-                    return draw_from_dist(self.sub_actions[sub], self.seed)
+                    return action
 
             else:
 

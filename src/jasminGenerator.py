@@ -388,15 +388,11 @@ class JasminGenerator:
 
     def expressions(self, action=None, evaluation_type=None, scope=None, r_depth=0):
 
-#     print("Expression", r_depth, "->", action, " scope ", scope, "ev type", evaluation_type)
-
         r_depth = r_depth + 1
-        #print(r_depth)
 
         if action == JN.Pexpr:
 
             action = self.action_expressions.get_action(sub=JN.Pexpr, scope=scope, r_depth=r_depth)
-            #print("Pexpr ", action, scope)
 
             """
             
@@ -407,7 +403,7 @@ class JasminGenerator:
             if action == "true" or action == "false":
 
                 if scope != JT.BOOL:
-                   # print("TRUE/FALSE: ", scope, evaluation_type)
+
                     return self.expressions(action=JN.Pexpr, scope=scope, evaluation_type=evaluation_type)
 
                 elif action == "true":
@@ -426,7 +422,7 @@ class JasminGenerator:
 
                 else:
 
-                    return ["32123"]                                                                                    #TODO should be a random int
+                    return [np.random.randint(0,10000)]
 
             if action == JN.Var:
                # print("JN Var: ", scope)
@@ -576,6 +572,8 @@ class JasminGenerator:
 
                 var_to_assign = self.instructions(action=JN.Plvalue, r_depth=r_depth, scope=JS.Variables)
 
+                #print(var_to_assign)
+
                 if var_to_assign == "_":
 
                     ev_type = self.action_types.get_action(sub="assign_type")
@@ -588,9 +586,12 @@ class JasminGenerator:
 
                     ev_type = self.variable_types[var_to_assign]
 
-
                 assign_op      = self.instructions(action=JN.Peqop, scope=ev_type)
-                value_to_assign= self.expressions(action=JN.Pexpr, scope=JS.Variables, evaluation_type=ev_type)
+                value_to_assign= self.expressions(action=JN.Pexpr, scope=ev_type, evaluation_type=ev_type)
+
+                #print(ev_type)
+                #print(assign_op)
+                #print(value_to_assign)
 
                 if isinstance(var_to_assign, list):
                     result = var_to_assign
@@ -788,7 +789,7 @@ class JasminGenerator:
             self.variable_types[variable] = var_type
 
             if len(stor_type) > 3:
-                print("791", variable)
+                #print("791", variable)
                 self.variables[JS.Arrays].append(variable)
 
             if var_type in self.variables_of_type:
