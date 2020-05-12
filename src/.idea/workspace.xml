@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="90a82d82-ed5d-4841-9a20-5f9bbb41df80" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/jasminDistribution.py" beforeDir="false" afterPath="$PROJECT_DIR$/jasminDistribution.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jasminFuzzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/jasminFuzzer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jasminGenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/jasminGenerator.py" afterDir="false" />
     </list>
@@ -20,8 +19,8 @@
             <file pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/jasminGenerator.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="3735">
-                    <caret line="406" selection-start-line="406" selection-end-line="406" />
+                  <state relative-caret-position="789">
+                    <caret line="114" column="33" selection-start-line="114" selection-start-column="33" selection-end-line="114" selection-end-column="33" />
                     <folding>
                       <element signature="e#2333#2351#0" expanded="true" />
                     </folding>
@@ -39,8 +38,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/jasminDistribution.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="728">
-              <caret line="168" column="17" lean-forward="true" selection-start-line="168" selection-start-column="17" selection-end-line="168" selection-end-column="17" />
+            <state relative-caret-position="180">
+              <caret line="311" column="32" lean-forward="true" selection-start-line="311" selection-start-column="32" selection-end-line="311" selection-end-column="32" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -51,8 +50,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jasminFuzzer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
+            <state relative-caret-position="150">
+              <caret line="10" column="35" lean-forward="true" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -112,7 +111,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Plvalue</find>
       <find>Peqop</find>
       <find>expressions(action=JN.Pexpr</find>
       <find>&quot;int&quot;</find>
@@ -131,7 +129,6 @@
       <find>expression</find>
       <find>plvalue</find>
       <find>call_co</find>
-      <find>pvardecl</find>
       <find>JS.Array</find>
       <find>array</find>
       <find>call</find>
@@ -140,8 +137,10 @@
       <find>print</find>
       <find>self.variables[JS.Arrays]</find>
       <find>print</find>
-      <find>stack</find>
       <find>assign</find>
+      <find>&quot;return &quot;</find>
+      <find>stack</find>
+      <find>pvardecl</find>
     </findStrings>
     <replaceStrings>
       <replace>JN.Ptype</replace>
@@ -162,8 +161,8 @@
         <option value="$PROJECT_DIR$/jasminScopes.py" />
         <option value="$PROJECT_DIR$/jasminTypes.py" />
         <option value="$PROJECT_DIR$/jasminPrettyPrint.py" />
-        <option value="$PROJECT_DIR$/jasminGenerator.py" />
         <option value="$PROJECT_DIR$/jasminFuzzer.py" />
+        <option value="$PROJECT_DIR$/jasminGenerator.py" />
         <option value="$PROJECT_DIR$/jasminDistribution.py" />
       </list>
     </option>
@@ -319,8 +318,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/jasminGenerator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3735">
-          <caret line="406" selection-start-line="406" selection-end-line="406" />
+        <state relative-caret-position="789">
+          <caret line="114" column="33" selection-start-line="114" selection-start-column="33" selection-end-line="114" selection-end-column="33" />
           <folding>
             <element signature="e#2333#2351#0" expanded="true" />
           </folding>
@@ -329,8 +328,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/jasminFuzzer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
+        <state relative-caret-position="150">
+          <caret line="10" column="35" lean-forward="true" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
@@ -339,8 +338,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/jasminDistribution.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="728">
-          <caret line="168" column="17" lean-forward="true" selection-start-line="168" selection-start-column="17" selection-end-line="168" selection-end-column="17" />
+        <state relative-caret-position="180">
+          <caret line="311" column="32" lean-forward="true" selection-start-line="311" selection-start-column="32" selection-end-line="311" selection-end-column="32" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
