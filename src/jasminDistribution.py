@@ -305,9 +305,9 @@ class GlobalDeclarations:
             JN.Module   : 0.01,
             JN.Top      : 0.25,
             JN.Call_conv: 0.0,
-            JN.Pfundef  : 0.4,
-            JN.Param    : 0.1,
-            JN.Pglobal  : 0.24
+            JN.Pfundef  : 0.74
+            #JN.Param    : 0.1,
+            #JN.Pglobal  : 0.24
         }
 
         self.sub_actions = {
@@ -318,9 +318,9 @@ class GlobalDeclarations:
             },
 
             JN.Top : {
-                JN.Pfundef:   0.75,
-                JN.Param  :    0.07,
-                JN.Pglobal:   0.18
+                JN.Pfundef:   0.93,
+                JN.Param  :    0.07
+                #JN.Pglobal:   0.18
             },
 
             JN.Call_conv : {

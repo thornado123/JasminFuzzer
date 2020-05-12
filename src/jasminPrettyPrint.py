@@ -1,5 +1,7 @@
 import re
 from queue import SimpleQueue as sq
+
+
 def jasmin_pretty_print(jasmin_code):
     pretty_jasmin = []
     indentations = 0
@@ -16,4 +18,5 @@ def jasmin_pretty_print(jasmin_code):
             continue
         pretty_jasmin.append(c)
     pretty_jasmin = ''.join(pretty_jasmin)
+
     return pretty_jasmin

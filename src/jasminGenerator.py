@@ -224,10 +224,16 @@ class JasminGenerator:
 
         else:
 
+            #print("scope", scope)
+            #print(self.variables_of_type.keys())
+            #print(self.variable_types.keys())
+            #print(self.variables_of_type[scope])
+            #print(len(self.variables_of_type[scope]) > 1 and isinstance(self.variables_of_type[scope], list))
             if scope in self.variables_of_type:
-
-                return np.random.choice(self.variables_of_type[scope], 1, replace=False)[0]
-
+                if len(self.variables_of_type[scope]) > 1 and isinstance(self.variables_of_type[scope], list):
+                    return np.random.choice(self.variables_of_type[scope], 1, replace=False)[0]
+                else:
+                    return self.variables_of_type[scope]
             else:
 
                 return None
@@ -297,8 +303,11 @@ class JasminGenerator:
             if len(input_param_type) >= 3:
                 self.variables[JS.Arrays].append(input_param)
 
-            self.variable_types[input_param]            = input_param_type[1]
-            self.variables_of_type[input_param_type[1]] = input_param
+
+            #print("Pfundef: ", input_param, input_param_type[2])
+
+            self.variable_types[input_param]            = input_param_type[2]
+            self.variables_of_type[input_param_type[2]] = [input_param]
 
             result = [decl, " "]
             result += ["fn ", function_name, "("]
@@ -338,7 +347,6 @@ class JasminGenerator:
                     " = ", self.expressions(action=JN.Pexpr, r_depth=0)]
 
         elif action == JN.Pglobal:
-
             var         = self.expressions(action=JN.Ident, r_depth=0)
             var_type    = self.variable_types[var]
             value       = self.expressions(action=JN.Pexpr, scope=var_type, evaluation_type=var_type, r_depth=0)
@@ -383,7 +391,7 @@ class JasminGenerator:
             if action == "true" or action == "false":
 
                 if scope != JT.BOOL:
-
+                   # print("TRUE/FALSE: ", scope, evaluation_type)
                     return self.expressions(action=JN.Pexpr, scope=scope, evaluation_type=evaluation_type)
 
                 elif action == "true":
@@ -405,7 +413,7 @@ class JasminGenerator:
                     return ["32123"]                                                                                    #TODO should be a random int
 
             if action == JN.Var:
-
+               # print("JN Var: ", scope)
                 result = self.expressions(action=JN.Var, scope=scope, r_depth=r_depth)
 
                 if result is None:
@@ -527,7 +535,7 @@ class JasminGenerator:
             return self.expressions(action=JN.Ident, scope=scope, evaluation_type=evaluation_type, r_depth=r_depth)
 
         if action == JN.Ident:
-
+           # print("scope", scope)
             return self.get_variable(scope, evaluation_type=evaluation_type)
 
         raise Exception("EXPRESSION NO MATCH")
@@ -676,7 +684,7 @@ class JasminGenerator:
         if action == JN.Plvalue:
 
             action = self.action_instructions.get_action(sub=JN.Plvalue, r_depth=r_depth)
-            print(action)
+           # print(action)
             if action == "_":
 
                 return "_"
@@ -711,13 +719,17 @@ class JasminGenerator:
 
         if action == JN.Pfunbody:
 
-            result = ["{\n"]
+            result          = ["{\n"]
+            amount_of_vars  = range(self.action_functions.get_amount_of_decls())
+            amount_of_incs  = range(self.action_functions.get_amount_of_instructions())
 
-            for _ in range(self.action_functions.get_amount_of_decls()):
+           # print("Amount of vars in func:", amount_of_vars)
+
+            for _ in amount_of_vars:
 
                 result += self.functions(action=JN.Pvardecl, r_depth=r_depth)
 
-            for _ in range(self.action_functions.get_amount_of_instructions()):
+            for _ in amount_of_incs:
 
                 result += self.instructions(JN.Pinstr, r_depth=r_depth, scope=JS.Variables)
                 result += "\n"
