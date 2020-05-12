@@ -157,16 +157,28 @@ class JasminGenerator:
         for var in self.variable_types.keys():
 
             if program_list.count(var) == 1:
+                index = program_list.index(var)
+
                 if var == "v0":
-                    print("Special case v0")
+
+                    program_list[index]     = ""
+                    program_list[index - 1] = ""
+                    program_list[index - 2] = ""
+                    program_list[index - 3] = ""
+                    program_list[index - 4] = ""
+
                 else:
-                    index = program_list.index(var)
+
                     program_list[index + 1] = ""
                     program_list[index]     = ""
                     program_list[index - 1] = ""
                     program_list[index - 2] = ""
                     program_list[index - 3] = ""
                     program_list[index - 4] = ""
+
+                    if var in self.variables[JS.Arrays]:
+
+                        program_list[index-5] = ""
 
         return program_list
 
@@ -340,7 +352,6 @@ class JasminGenerator:
 
                 result[14] = return_var_type
                 result[-3] = return_var
-
 
             return result
 
