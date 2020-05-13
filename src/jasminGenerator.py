@@ -544,12 +544,18 @@ class JasminGenerator:
                 if isinstance(exp1, list):
                     result += exp1
                 else:
-                    result.append(exp1)
+                    if exp1 in self.variables[JS.Arrays]:
+                        result += [exp1, "[1]"]
+                    else:
+                        result.append(exp1)
                 result.append(opera)
                 if isinstance(exp2, list):
                     result += exp2
                 else:
-                    result.append(exp2)
+                    if exp2 in self.variables[JS.Arrays]:
+                        result += [exp2, "[1]"]
+                    else:
+                        result.append(exp2)
                 result.append(")")
 
                 return result
