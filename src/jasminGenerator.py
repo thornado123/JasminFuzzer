@@ -342,7 +342,7 @@ class JasminGenerator:
                 self.function_return = True
                 self.return_types = return_type[1]
 
-            result += self.functions(action=JN.Pfunbody, r_depth=0)
+            result_1, result_2 = self.functions(action=JN.Pfunbody, r_depth=0)
 
             if self.function_return:
 
@@ -362,7 +362,29 @@ class JasminGenerator:
 
                 result[12] = return_var_storage
                 result[14] = return_var_type
-                result[-3] = return_var
+                result_2[-3] = return_var
+
+            if self.variables_input[0] in self.variables_used_before_assignment:
+                self.variables_used_before_assignment.remove(self.variables_input[0])
+
+            result_assignments = []
+
+            for var in self.variables_used_before_assignment:
+
+                if self.variable_types[var] == JT.BOOL:
+
+                    assignment = [var, " = ", "true;\n"]
+
+                else:
+
+                    assignment = [var, " = ", np.random.randint(0, 1000), ";\n"]
+
+                if var in self.variables[JS.Arrays]:
+                    assignment[1] = "[1] = "
+
+                result_assignments += assignment
+
+            result += result_1 + result_assignments + result_2
 
             return result
 
@@ -712,7 +734,10 @@ class JasminGenerator:
         if action == JN.Pblock:
 
             result = ["{\n"]
-            result += self.instructions(action=JN.Pinstr, scope=JS.Variables, r_depth=r_depth)
+            for _ in range(self.action_instructions.get_amount_of_instructions()):
+
+                result += self.instructions(action=JN.Pinstr, scope=JS.Variables, r_depth=r_depth)
+
             result += ["\n}"]                                                                                           #TODO should be able to do multiple
 
             return result
@@ -767,36 +792,13 @@ class JasminGenerator:
                 result_2 += self.instructions(JN.Pinstr, r_depth=r_depth, scope=JS.Variables)
                 result_2 += "\n"
 
-            if self.variables_input[0] in self.variables_used_before_assignment:
-
-                self.variables_used_before_assignment.remove(self.variables_input[0])
-
-            result_assignments = []
-            for var in self.variables_used_before_assignment:
-
-                if self.variable_types[var] == JT.BOOL:
-
-                    assignment = [var, " = ", "true;\n"]
-
-                else:
-
-                    assignment = [var, " = ", np.random.randint(0, 1000), ";\n"]
-
-                if var in self.variables[JS.Arrays]:
-
-                    assignment[1] = "[1] = "
-
-                result_assignments += assignment
-
-            result = result_1 + result_assignments + result_2
-
             if self.function_return:
 
-                result += ["return ", None, ";"]
+                result_2 += ["return ", None, ";"]
 
-            result += ["\n}"]
+            result_2 += ["\n}"]
 
-            return result
+            return result_1, result_2
 
         if action == JN.Storage:
 

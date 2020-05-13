@@ -128,6 +128,10 @@ class Instructions:
 
         }
 
+    def get_amount_of_instructions(self):
+
+        return np.random.randint(low=1, high=2, size=1)[0]
+
     def recursive_prob(self, r_depth):
 
         return r_depth**self.n / (r_depth**self.n + self.h**self.n)
