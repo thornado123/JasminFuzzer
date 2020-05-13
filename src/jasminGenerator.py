@@ -103,6 +103,11 @@ class JasminGenerator:
         self.variables_of_type  = {}
         self.variables_storage  = {}
 
+        #If a variable is used and it is not in ..._assigned then its added to ..._used_before...
+        self.variables_input    = []
+        self.variables_assigned = []
+        self.variables_used_before_assignment = []
+
         self.variables = {
 
             JS.Variables    : [],
@@ -245,7 +250,7 @@ class JasminGenerator:
 
                 else:
 
-                    return self.variables_of_type[scope]
+                    return self.variables_of_type[scope][0]
 
             else:
 
@@ -319,6 +324,8 @@ class JasminGenerator:
 
             self.variable_types[input_param]            = input_param_type[2]
             self.variables_of_type[input_param_type[2]] = [input_param]
+            self.variables_input                        = [input_param]
+            self.variables_storage[input_param]         = input_param_type[0]
 
             result = [decl, " "]
             result += ["fn ", function_name, "("]
@@ -331,8 +338,7 @@ class JasminGenerator:
                 return_type = self.functions(action=JN.Stor_type, r_depth=0)
 
                 result.append(" -> ")
-                result += return_type                                                                                   #TODO can be a tuple
-
+                result += return_type
                 self.function_return = True
                 self.return_types = return_type[1]
 
@@ -343,6 +349,10 @@ class JasminGenerator:
                 return_var          = self.get_variable(scope=JS.Variables)
                 return_var_type     = self.variable_types[return_var]
                 return_var_storage  = self.variables_storage[return_var]
+
+                if return_var not in self.variables_assigned:
+
+                    self.variables_used_before_assignment.append(return_var)
 
                 if return_var in self.variables[JS.Arrays]:
                     index = 15
@@ -429,9 +439,14 @@ class JasminGenerator:
                 result = self.expressions(action=JN.Var, scope=scope, r_depth=r_depth)
 
                 if result is None:
+
                     return self.expressions(action=JN.Pexpr, scope=scope, evaluation_type=evaluation_type, r_depth=r_depth)
 
                 else:
+
+                    if result not in self.variables_assigned and result not in self.variables_used_before_assignment:
+
+                        self.variables_used_before_assignment.append(result)
 
                     return result
 
@@ -587,13 +602,26 @@ class JasminGenerator:
                 value_to_assign= self.expressions(action=JN.Pexpr, scope=ev_type, evaluation_type=ev_type)
 
                 if isinstance(var_to_assign, list):
+
                     result = var_to_assign
+
                 else:
+
                     result = [var_to_assign]
 
                 result.append(assign_op)
                 result += value_to_assign
                 result.append(";")
+
+                """
+                
+                    Append the variable to assigned variables
+                
+                """
+
+                if var_to_assign not in self.variables_used_before_assignment:
+
+                    self.variables_assigned.append(var_to_assign)
 
                 return result
 
@@ -725,18 +753,42 @@ class JasminGenerator:
 
         if action == JN.Pfunbody:
 
-            result          = ["{\n"]
+            result_1          = ["{\n"]
             amount_of_vars  = range(self.action_functions.get_amount_of_decls())
             amount_of_incs  = range(self.action_functions.get_amount_of_instructions())
 
             for _ in amount_of_vars:
 
-                result += self.functions(action=JN.Pvardecl, r_depth=r_depth)
+                result_1 += self.functions(action=JN.Pvardecl, r_depth=r_depth)
 
+            result_2 = []
             for _ in amount_of_incs:
 
-                result += self.instructions(JN.Pinstr, r_depth=r_depth, scope=JS.Variables)
-                result += "\n"
+                result_2 += self.instructions(JN.Pinstr, r_depth=r_depth, scope=JS.Variables)
+                result_2 += "\n"
+
+            if self.variables_input[0] in self.variables_used_before_assignment:
+
+                self.variables_used_before_assignment.remove(self.variables_input[0])
+
+            result_assignments = []
+            for var in self.variables_used_before_assignment:
+
+                if self.variable_types[var] == JT.BOOL:
+
+                    assignment = [var, " = ", "true;\n"]
+
+                else:
+
+                    assignment = [var, " = ", np.random.randint(0, 1000), ";\n"]
+
+                if var in self.variables[JS.Arrays]:
+
+                    assignment[1] = "[1] = "
+
+                result_assignments += assignment
+
+            result = result_1 + result_assignments + result_2
 
             if self.function_return:
 
