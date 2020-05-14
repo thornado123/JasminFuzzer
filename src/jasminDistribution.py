@@ -29,9 +29,9 @@ class Functions:
         self.sub_actions = {
 
             JN.Storage : {
-                "reg": 0.33,
-                "stack": 0.33,
-                "inline": 0.34
+                #"inline": 0.34
+                "reg": 1#0.75,
+                #"stack": 0.25
             },
 
             "return" : {
@@ -114,8 +114,8 @@ class Instructions:
 
             JN.Plvalue : {
 
-                "_"     : 0.1,
-                JN.Var  : 0.6,
+                #"_"     : 0.1,
+                JN.Var  : 0.7,
                 "array" : 0.3
 
             },
@@ -203,9 +203,9 @@ class Types:
 
             JN.Ptype : {
 
-                JT.BOOL: 0.3,
-                JT.INT: 0.3,
-                JN.Utype: 0.3,
+                JT.BOOL: 0.25,
+                JT.INT: 0.25,
+                JN.Utype: 0.4,
                 "array": 0.1
 
             },

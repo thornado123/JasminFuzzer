@@ -5,7 +5,8 @@ import jasminPrettyPrint as JPP
 def main():
     out = ""
 
-    for i in range(0, 10):
+    for i in range(0, 100):
+
         program_generator = JPG.JasminGenerator(i)
         out = program_generator.get_program()
         out = [str(x) for x in out]

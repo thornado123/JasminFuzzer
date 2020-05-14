@@ -175,6 +175,8 @@ class JasminGenerator:
                     program_list[index - 3] = ""
                     program_list[index - 4] = ""
 
+                    if var in self.variables[JS.Arrays]:
+                        program_list[index-5] = ""
                 else:
 
                     program_list[index + 1] = ""
@@ -344,24 +346,31 @@ class JasminGenerator:
 
             result_1, result_2 = self.functions(action=JN.Pfunbody, r_depth=0)
 
+            result += result_1
+
             if self.function_return:
 
                 return_var          = self.get_variable(scope=JS.Variables)
                 return_var_type     = self.variable_types[return_var]
+
                 return_var_storage  = self.variables_storage[return_var]
 
                 if return_var not in self.variables_assigned:
 
                     self.variables_used_before_assignment.append(return_var)
 
-                if return_var in self.variables[JS.Arrays]:
-                    index = 15
-                    if "v0" in self.variables[JS.Arrays]:
-                        index += 1
-                    result[index] = "[5]" + result[index]
+                index_append = 0
 
-                result[12] = return_var_storage
-                result[14] = return_var_type
+                if "v0" in self.variables[JS.Arrays]:
+
+                    index_append = 1
+
+                if return_var in self.variables[JS.Arrays]:
+
+                    result[15 + index_append] = "[5]" + result[15 + index_append]
+
+                result[12 + index_append] = return_var_storage
+                result[14 + index_append] = return_var_type
                 result_2[-3] = return_var
 
             if self.variables_input[0] in self.variables_used_before_assignment:
@@ -384,7 +393,7 @@ class JasminGenerator:
 
                 result_assignments += assignment
 
-            result += result_1 + result_assignments + result_2
+            result += result_assignments + result_2
 
             return result
 
@@ -394,6 +403,7 @@ class JasminGenerator:
                     " = ", self.expressions(action=JN.Pexpr, r_depth=0)]
 
         elif action == JN.Pglobal:
+
             var         = self.expressions(action=JN.Ident, r_depth=0)
             var_type    = self.variable_types[var]
             value       = self.expressions(action=JN.Pexpr, scope=var_type, evaluation_type=var_type, r_depth=0)
@@ -470,6 +480,10 @@ class JasminGenerator:
 
                         self.variables_used_before_assignment.append(result)
 
+                    if result in self.variables[JS.Arrays]:
+
+                        result = [result, "[1]"]
+
                     return result
 
             """
@@ -490,13 +504,27 @@ class JasminGenerator:
 
                 if var is not None:
 
-                    result = [var, "["]
-                    exp = self.expressions(action=JN.Pexpr, scope=JT.INT, evaluation_type=JT.INT, r_depth=r_depth)
-                    if isinstance(exp, list):
-                        result += exp
+                    if isinstance(var, list):                                                                           #TODO fix this
+
+                        result = var
+
                     else:
-                        result.append(exp)
-                    result.append("]")
+
+                        result = [var, "["]
+                        """
+                        exp = self.expressions(action=JN.Pexpr, scope=JT.INT, evaluation_type=JT.INT, r_depth=r_depth)
+                        if isinstance(exp, list):
+                            result += exp
+                        else:
+                            result.append(exp)
+                        """
+                        result.append("1")
+                        result.append("]")
+
+                    if result[0] not in self.variables_assigned and result[0] not in self.variables_used_before_assignment:
+
+                        self.variables_used_before_assignment.append(result[0])
+
 
                     return result
 
@@ -614,11 +642,14 @@ class JasminGenerator:
 
                 var_to_assign = self.instructions(action=JN.Plvalue, r_depth=r_depth, scope=JS.Variables)
 
+                """
                 if var_to_assign == "_":
 
                     ev_type = self.action_types.get_action(sub="assign_type")
 
-                elif isinstance(var_to_assign, list):
+                el
+                """
+                if isinstance(var_to_assign, list):
 
                     ev_type = self.variable_types[var_to_assign[0]]
 
@@ -632,10 +663,15 @@ class JasminGenerator:
                 if isinstance(var_to_assign, list):
 
                     result = var_to_assign
+                    var_to_assign = var_to_assign[0]
 
                 else:
 
                     result = [var_to_assign]
+
+                if not isinstance(value_to_assign, list):
+
+                    value_to_assign = [value_to_assign]
 
                 result.append(assign_op)
                 result += value_to_assign
@@ -751,24 +787,40 @@ class JasminGenerator:
         if action == JN.Plvalue:
 
             action = self.action_instructions.get_action(sub=JN.Plvalue, r_depth=r_depth)
+
             if action == "_":
 
                 return "_"
 
             if action == JN.Var:
 
-                return self.expressions(action=JN.Var, r_depth=r_depth, scope=scope)
+                result =  self.expressions(action=JN.Var, r_depth=r_depth, scope=scope)
+
+                if result in self.variables[JS.Arrays]:
+
+                    return [result, "[1]"]
+
+                else:
+
+                    return result
+
 
             if action == "array":
 
-                var     = self.expressions(action=JN.Var, r_depth=r_depth, scope=scope)
-                index   = self.expressions(action=JN.Pexpr, r_depth=r_depth, scope=JT.INT, evaluation_type=JT.INT)
+                var = self.expressions(action=JN.Var, r_depth=r_depth, scope=JS.Arrays)
 
-                result = [var, "["]
-                result += index
-                result.append("]")
+                if var is not None:
 
-                return result
+                    index = 1  #self.expressions(action=JN.Pexpr, r_depth=r_depth, scope=JT.INT, evaluation_type=JT.INT)
+                    result = [var, "["]
+                    result += index
+                    result.append("]")
+
+                    return result
+
+                else:
+
+                    return self.instructions(action=JN.Plvalue, r_depth = r_depth, scope=scope)
 
         raise Exception("INSTRUCTION NO MATCH")
 
