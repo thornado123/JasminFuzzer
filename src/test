@@ -1,0 +1,11 @@
+	.text
+	.p2align	5
+	.globl	_f0
+	.globl	f0
+_f0:
+f0:
+	cmpq	$42, %rdi
+	je  	Lf0$1
+	subq	%rdi, %rax
+Lf0$1:
+	ret 

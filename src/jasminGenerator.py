@@ -181,7 +181,7 @@ class JasminGenerator:
 
             input_type = self.variable_types[self.variables_input[0]]
 
-        if self.function_return:
+        if len(program_list) > 3 and self.function_return:
 
             output_type = self.variable_types[program_list[-3]]
 
