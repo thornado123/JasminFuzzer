@@ -9,6 +9,7 @@ def main():
 
         program_generator = JPG.JasminGenerator(i)
         out = program_generator.get_program()
+
         out = [str(x) for x in out]
         out = "".join(out)
         out = JPP.jasmin_pretty_print(out)
