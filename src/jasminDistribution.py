@@ -193,19 +193,19 @@ class Types:
             JN.Utype : {
 
                 JT.U8 : 0.05,
-                JT.U16: 0.1,
-                JT.U32: 0.1,
-                JT.U64: 0.6,
-                JT.U128: 0.1,
-                JT.U256: 0.05
+                JT.U16: 0.15,
+                JT.U32: 0.2,
+                JT.U64: 0.6
+                #JT.U128: 0.1
+                #JT.U256: 0.05
 
             },
 
             JN.Ptype : {
 
                 JT.BOOL: 0.25,
-                JT.INT: 0.25,
-                JN.Utype: 0.4,
+                JT.INT: 0.1,
+                JN.Utype: 0.55,
                 "array": 0.1
 
             },
@@ -214,10 +214,10 @@ class Types:
 
                 JT.U8: 0.025,
                 JT.U16: 0.05,
-                JT.U32: 0.05,
-                JT.U64: 0.3,
-                JT.U128: 0.05,
-                JT.U256: 0.025,
+                JT.U32: 0.1,
+                JT.U64: 0.325,
+                #JT.U128: 0.05,
+                #JT.U256: 0.025,
                 JT.BOOL: 0.3,
                 JT.INT: 0.2
             },
@@ -225,11 +225,11 @@ class Types:
             "assign_type": {
 
                 JT.U8: 0.025,
-                JT.U16: 0.05,
-                JT.U32: 0.15,
+                JT.U16: 0.1,
+                JT.U32: 0.165,
                 JT.U64: 0.41,
-                JT.U128: 0.05,
-                JT.U256: 0.015,
+                #JT.U128: 0.05,
+                #JT.U256: 0.015,
                 JT.INT: 0.3
             }
 

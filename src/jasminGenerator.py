@@ -185,7 +185,7 @@ class JasminGenerator:
 
             output_type = self.variable_types[program_list[-3]]
 
-        if input_type in target_types or output_type in target_types:
+        if input_type in target_types or output_type in target_types or program_list[-3] in self.variables[JS.Arrays]:
 
             extras = ["reg u64 final;\n"]
 
@@ -210,6 +210,12 @@ class JasminGenerator:
                     extras += [
                                 "result = f0(input);\n"
                                ]
+                else:
+
+                    extras += ["reg ", input_type, " b1;\n",
+                               "b1 = ", np.random.randint(0, 1000), ";\n",
+                               "result = f0(b1);\n"
+                               ]
 
             elif input_type in target_types:
 
@@ -228,6 +234,10 @@ class JasminGenerator:
 
             if output_type is not None:
 
+                if input_type is None:
+
+                    extras += ["result = f0();\n"]
+
                 if output_type == JT.BOOL:
 
                     extras = ["reg bool result;\n"] + extras
@@ -238,11 +248,17 @@ class JasminGenerator:
 
                 elif output_type == JT.INT:
 
-                    extras = ["reg int result;\n", "inline int i;\n"] + extras
-                    extras += ["for i = 0 to result {\n",
+                    extras = ["inline int result;\n"] + extras
+                    extras += ["final = result;\n","input += final;"]
+
+                elif program_list[-3] in self.variables[JS.Arrays]:
+
+                    extras = ["reg ", output_type, "[5] result;\n"] + extras
+                    extras += ["if result[1] > 42 {\n",
                                "input += 1;\n",
                                "}"
                                ]
+
                 else:
 
                     extras = ["reg ", output_type, " result;\n"] + extras
@@ -445,13 +461,40 @@ class JasminGenerator:
                 self.return_types = return_type[1]
 
             result_1, result_2 = self.functions(action=JN.Pfunbody, r_depth=0)
-
             result += result_1
 
             if self.function_return:
 
-                return_var          = self.get_variable(scope=JS.Variables)
-                return_var_type     = self.variable_types[return_var]
+                if len(self.variables_input) > 0 and self.variable_types[self.variables_input[0]] == JT.U64:
+
+                    return_var      = self.get_variable(scope=JT.U64)
+                    return_var_type = JT.U64
+
+                    if self.variables_input[0] == return_var:
+
+                        result += ['reg', ' ', JT.U64, ' ', 'out', ';\n']
+                        result_2 = result_2[:-4] + ["out = ", return_var,";\n", result_2[-4]] + result_2[-3:]
+                        return_var = "out"
+
+
+                        self.variables_storage[return_var] = "reg"
+                        self.variable_types[return_var] = JT.U64
+
+                elif JT.U64 in self.variables_of_type:
+
+                    return_var = self.get_variable(scope=JT.U64)
+                    return_var_type = JT.U64
+
+                else:
+
+                    return_var          = self.get_variable(scope=JS.Variables)
+                    return_var_type     = self.variable_types[return_var]
+
+                if self.variable_types[return_var] == JT.INT:
+
+                    self.variables_storage[return_var] = "inline"
+                    index = result.index(return_var)
+                    result[index-4] = "inline"
 
                 return_var_storage  = self.variables_storage[return_var]
 
@@ -465,7 +508,7 @@ class JasminGenerator:
 
                     index_append = 1
 
-                if return_var in self.variables[JS.Arrays]:
+                if return_var in self.variables[JS.Arrays] and len(return_type) < 4:
 
                     result[15 + index_append] = "[5]" + result[15 + index_append]
 
@@ -474,31 +517,63 @@ class JasminGenerator:
                 result_2[-3] = return_var
 
             if self.variables_input[0] in self.variables_used_before_assignment:
+
                 self.variables_used_before_assignment.remove(self.variables_input[0])
 
-            result_assignments = []
+            result_assignments  = []
+            bool_assignments    = []
 
             for var in self.variables_used_before_assignment:
 
-                if self.variable_types[var] == JT.BOOL:                                                                 # TODO to ensure boolean we added input
+                if self.variable_types[var] == JT.BOOL:
 
                     if self.variable_types[self.variables_input[0]] == JT.BOOL:
 
                         assignment = [var, " = ", self.variables_input[0], ";\n"]
+                        result_assignments += assignment
 
                     else:
 
-                        assignment = ["_, _, _, _, ", var, " = #CMP(", self.variables_input[0], ", 42);\n"]
+                        bool_assignments.append(var)
+
+            if len(bool_assignments) > 0:
+
+                if self.variable_types[self.variables_input[0]] != JT.U64:
+
+                    self.variable_types[self.variables_input[0]] = JT.U64
+                    result[7] = JT.U64
+
+                assignment = [bool_assignments[0]]
+
+                for var in bool_assignments[1:]:
+
+                    assignment += [", " + var]
+
+                for _ in range(5 - len(bool_assignments)):
+
+                    assignment = ["_, "] + assignment
+
+                if self.variables_input[0] in self.variables[JS.Arrays]:
+
+                    assignment += [" = #CMP(", self.variables_input[0], "[1], 42);\n"]
 
                 else:
 
-                    assignment = [var, " = ", np.random.randint(0, 1000), ";\n"]
-
-                if var in self.variables[JS.Arrays]:
-
-                    assignment[1] = "[1] = "
+                    assignment += [" = #CMP(", self.variables_input[0], ", 42);\n"]
 
                 result_assignments += assignment
+
+            for var in self.variables_used_before_assignment:
+
+                if self.variable_types[var] != JT.BOOL and var != "out":                                                #TODO to ensure boolean we added input
+
+                    assignment = [var, " = ", np.random.randint(0, 1000), ";\n"]
+
+                    if var in self.variables[JS.Arrays]:
+
+                        assignment[1] = "[1] = "
+
+                    result_assignments += assignment
 
             result += result_assignments + result_2
 
@@ -756,33 +831,52 @@ class JasminGenerator:
 
                 el
                 """
-                if isinstance(var_to_assign, list):
+                if not isinstance(var_to_assign, list) and self.variable_types[var_to_assign] == JT.BOOL:
 
-                    ev_type = self.variable_types[var_to_assign[0]]
+                    u64_var = self.expressions(action=JN.Var, scope=JT.U64)
+                    if u64_var is not None:
+
+                        result = ["_, _, _, _, ", var_to_assign, " = #CMP(", u64_var, ", 42);\n"]
+
+                    else:
+
+                        if len(self.variables_input) > 0 and self.variable_types[self.variables_input[0]] == JT.BOOL:
+
+                            result = [var_to_assign, " = ", self.variables_input[0], ";\n"]
+
+                        else:
+
+                            result = ["_, _, _, _, ", var_to_assign, " = #CMP(", u64_var, ", 42);\n"]
 
                 else:
 
-                    ev_type = self.variable_types[var_to_assign]
+                    if isinstance(var_to_assign, list):
 
-                assign_op      = self.instructions(action=JN.Peqop, scope=ev_type)
-                value_to_assign= self.expressions(action=JN.Pexpr, scope=ev_type, evaluation_type=ev_type)
+                        ev_type = self.variable_types[var_to_assign[0]]
 
-                if isinstance(var_to_assign, list):
+                    else:
 
-                    result = var_to_assign
-                    var_to_assign = var_to_assign[0]
+                        ev_type = self.variable_types[var_to_assign]
 
-                else:
+                    assign_op      = self.instructions(action=JN.Peqop, scope=ev_type)
+                    value_to_assign= self.expressions(action=JN.Pexpr, scope=ev_type, evaluation_type=ev_type)
 
-                    result = [var_to_assign]
+                    if isinstance(var_to_assign, list):
 
-                if not isinstance(value_to_assign, list):
+                        result = var_to_assign
+                        var_to_assign = var_to_assign[0]
 
-                    value_to_assign = [value_to_assign]
+                    else:
 
-                result.append(assign_op)
-                result += value_to_assign
-                result.append(";")
+                        result = [var_to_assign]
+
+                    if not isinstance(value_to_assign, list):
+
+                        value_to_assign = [value_to_assign]
+
+                    result.append(assign_op)
+                    result += value_to_assign
+                    result.append(";")
 
                 """
                 
@@ -831,7 +925,7 @@ class JasminGenerator:
                         """
                         first_var = self.expressions(action=JN.Var, scope=JT.INT)
                         second_var = self.expressions(action=JN.Pexpr, scope=JT.INT, evaluation_type=JT.INT)
-                        third_var = self.expressions(action=JN.Pexpr, scope=JT.INT, evaluation_type=JT.INT)
+                        third_var = np.random.randint(0, 1000) #self.expressions(action=JN.Pexpr, scope=JT.INT, evaluation_type=JT.INT) #To avoid assertion fail
 
                         return ["for ", first_var, " = ", second_var, " to ", third_var,
                                 self.instructions(action=JN.Pblock, r_depth=r_depth)]

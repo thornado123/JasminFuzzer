@@ -7,10 +7,11 @@ def main():
 
     #result_outputs = pd.DataFrame(columns=["Seed", "Errors"])
     pandas_index  = 0
-    source_path   = "/Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz"
+    source_path   = "/Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test"
     compiler_path = "/Users/thorjakobsen/GIT/jasmin/compiler/./jasminc"
-
-    for i in range(0, 100):
+    counter = 0
+    for i in range(23, 24):
+    #for i in range(0, 100):
 
         program_generator = JPG.JasminGenerator(i)
         out = program_generator.get_program()
@@ -19,11 +20,13 @@ def main():
         out = "".join(out)
         out = JPP.jasmin_pretty_print(out)
 
-        with open("/Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz", "w") as file:
+        print(out)
+
+        with open(source_path + str(i) + ".jazz", "w") as file:
             file.write(out)
             file.close()
 
-            process = subprocess.Popen([compiler_path, source_path, "-o", "test"],
+            process = subprocess.Popen([compiler_path, source_path + str(i) + ".jazz" ,"-o", "test"],
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE)
             _, stderr = process.communicate()
@@ -32,6 +35,8 @@ def main():
                 print(i, result)
                 #result_outputs.loc[pandas_index] = [i, result]
                 pandas_index += 1
+                counter += 1
+    print(counter)
 
     #result_outputs.to_csv("/Users/thorjakobsen/GIT/JasminFuzzer/results.csv")
 

@@ -5,7 +5,11 @@
 _f0:
 f0:
 	cmpq	$42, %rdi
-	je  	Lf0$1
-	subq	%rdi, %rax
+	jnp 	Lf0$1
+	jne 	Lf0$2
+	je  	Lf0$3
+Lf0$3:
+Lf0$2:
 Lf0$1:
+	movq	%rdi, %rax
 	ret 
