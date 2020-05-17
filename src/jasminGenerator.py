@@ -207,15 +207,34 @@ class JasminGenerator:
 
                 elif input_type == JT.U64:
 
-                    extras += [
-                                "result = f0(input);\n"
-                               ]
+                    if self.variables_input[0] in self.variables[JS.Arrays]:
+
+                        extras += [ "reg u64[5] b1;\n",
+                                    "b1[1] = input;\n"
+                                    "result = f0(b1);\n"
+                                ]
+
+                    else:
+
+                        extras += [
+                                    "result = f0(input);\n"
+                                   ]
+
                 else:
 
-                    extras += ["reg ", input_type, " b1;\n",
-                               "b1 = ", np.random.randint(0, 1000), ";\n",
-                               "result = f0(b1);\n"
-                               ]
+                    if self.variables_input[0] in self.variables[JS.Arrays]:
+
+                        extras += [ "reg ", input_type, "[5] b1;\n",
+                                    "b1[1] = ", np.random.randint(0, 1000),";\n",
+                                    "result = f0(b1);\n"
+                                ]
+
+                    else:
+
+                        extras += ["reg ", input_type, " b1;\n",
+                                   "b1 = ", np.random.randint(0, 1000), ";\n",
+                                   "result = f0(b1);\n"
+                                   ]
 
             elif input_type in target_types:
 
@@ -1005,7 +1024,6 @@ class JasminGenerator:
 
                     return result
 
-
             if action == "array":
 
                 var = self.expressions(action=JN.Var, r_depth=r_depth, scope=JS.Arrays)
@@ -1082,6 +1100,11 @@ class JasminGenerator:
             var_type    = stor_type[2]
             storage     = stor_type[0]
 
+            if var_type == JT.INT:
+                storage = "inline"
+                stor_type[0] = "inline"
+
+
             """
             
                 If var_type is of the form <type><brackets> it should be added to arrays as well
@@ -1145,8 +1168,3 @@ class JasminGenerator:
             return self.action_types.get_action(sub=JN.Utype, r_depth=r_depth)
 
         raise Exception("TYPE NO MATCH")
-
-
-
-
-

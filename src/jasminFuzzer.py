@@ -10,8 +10,8 @@ def main():
     source_path   = "/Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test"
     compiler_path = "/Users/thorjakobsen/GIT/jasmin/compiler/./jasminc"
     counter = 0
-    for i in range(23, 24):
-    #for i in range(0, 100):
+    #for i in range(55, 56):
+    for i in range(0, 100):
 
         program_generator = JPG.JasminGenerator(i)
         out = program_generator.get_program()
@@ -20,7 +20,7 @@ def main():
         out = "".join(out)
         out = JPP.jasmin_pretty_print(out)
 
-        print(out)
+        #print(out)
 
         with open(source_path + str(i) + ".jazz", "w") as file:
             file.write(out)

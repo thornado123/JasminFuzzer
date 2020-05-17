@@ -206,6 +206,7 @@ class Types:
                 JT.BOOL: 0.25,
                 JT.INT: 0.1,
                 JN.Utype: 0.55,
+                JN.Utype: 0.55,
                 "array": 0.1
 
             },
