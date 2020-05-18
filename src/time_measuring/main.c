@@ -23,7 +23,7 @@ double average_time_micro_sec(uint64_t arg)
     for (uint32_t i = 1; i <= REPETITIONS; i++)
     {
         gettimeofday(&start_time, NULL);
-        add1(arg);
+        f0(arg);
         gettimeofday(&end_time, NULL);
         time_sum += (end_time.tv_usec - start_time.tv_usec);
     }
