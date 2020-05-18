@@ -185,7 +185,7 @@ class JasminGenerator:
 
             output_type = self.variable_types[program_list[-3]]
 
-        if input_type in target_types or output_type in target_types or program_list[-3] in self.variables[JS.Arrays]:
+        if input_type is not None or output_type is not None or (len(program_list) > 3 and program_list[-3] in self.variables[JS.Arrays]):
 
             extras = ["reg u64 final;\n"]
 
@@ -200,7 +200,7 @@ class JasminGenerator:
 
                 elif input_type == JT.INT:
 
-                    extras += ["reg int b1;\n",
+                    extras += ["inline int b1;\n",
                                "b1 = ", np.random.randint(0, 1000), ";\n",
                                "result = f0(b1);\n"
                                ]
@@ -246,7 +246,7 @@ class JasminGenerator:
 
                 if input_type == JT.INT:
 
-                    extras += ["reg int b1;\n",
+                    extras += ["inline int b1;\n",
                                "b1 = ", np.random.randint(0, 1000), ";\n",
                                "f0(b1);\n"
                                ]
@@ -286,12 +286,12 @@ class JasminGenerator:
                                    "}"
                                    ]
 
+            if not (input_type == JT.U64 and output_type == JT.U64 and program_list[-3] not in self.variables[JS.Arrays]\
+                    and self.variables_input[0] not in self.variables[JS.Arrays]):
 
-
-            extras = ["export fn main(reg u64 input) -> reg u64 {\n"] + extras + ["\n", "final = input;\n", "return final;\n}"]
-
-            program_list[0] = "inline"
-            program_list = program_list + ["\n"] + extras
+                extras = ["export fn main(reg u64 input) -> reg u64 {\n"] + extras + ["\n", "final = input;\n", "return final;\n}"]
+                program_list[0] = "inline"
+                program_list = program_list + ["\n"] + extras
 
         return program_list
 
@@ -459,6 +459,10 @@ class JasminGenerator:
 
                 self.variables[JS.Arrays].append(input_param)
 
+            if input_param_type[2] == JT.INT:
+
+                input_param_type[0] = "inline"
+
             self.variable_types[input_param]            = input_param_type[2]
             self.variables_of_type[input_param_type[2]] = [input_param]
             self.variables_input                        = [input_param]
@@ -484,6 +488,8 @@ class JasminGenerator:
 
             if self.function_return:
 
+                return_var = None
+
                 if len(self.variables_input) > 0 and self.variable_types[self.variables_input[0]] == JT.U64:
 
                     return_var      = self.get_variable(scope=JT.U64)
@@ -492,7 +498,14 @@ class JasminGenerator:
                     if self.variables_input[0] == return_var:
 
                         result += ['reg', ' ', JT.U64, ' ', 'out', ';\n']
-                        result_2 = result_2[:-4] + ["out = ", return_var,";\n", result_2[-4]] + result_2[-3:]
+                        if return_var in self.variables[JS.Arrays]:
+
+                            result_2 = result_2[:-4] + ["out = ", return_var,"[1];\n", result_2[-4]] + result_2[-3:]
+
+                        else:
+
+                            result_2 = result_2[:-4] + ["out = ", return_var,";\n", result_2[-4]] + result_2[-3:]
+
                         return_var = "out"
 
 
@@ -506,8 +519,17 @@ class JasminGenerator:
 
                 else:
 
-                    return_var          = self.get_variable(scope=JS.Variables)
-                    return_var_type     = self.variable_types[return_var]
+                    for var in self.variable_types.keys():
+
+                        if self.variable_types[var] != JT.BOOL and self.variable_types[var] != JT.INT:
+
+                            return_var          = self.get_variable(scope=JS.Variables)
+                            return_var_type     = self.variable_types[return_var]
+
+                    if return_var is None:
+
+                        return_var = self.get_variable(scope=JS.Variables)
+                        return_var_type = self.variable_types[return_var]
 
                 if self.variable_types[return_var] == JT.INT:
 
@@ -531,6 +553,12 @@ class JasminGenerator:
 
                     result[15 + index_append] = "[5]" + result[15 + index_append]
 
+                if return_var not in self.variables[JS.Arrays]:
+
+                    index_arrow = result.index(" -> ")
+                    if result[index_arrow + 4] == "[5]":
+                        result[index_arrow + 4] = ""
+
                 result[12 + index_append] = return_var_storage
                 result[14 + index_append] = return_var_type
                 result_2[-3] = return_var
@@ -541,6 +569,8 @@ class JasminGenerator:
 
             result_assignments  = []
             bool_assignments    = []
+
+            self.variables_used_before_assignment = list(set(self.variables_used_before_assignment))
 
             for var in self.variables_used_before_assignment:
 
@@ -566,7 +596,7 @@ class JasminGenerator:
 
                 for var in bool_assignments[1:]:
 
-                    assignment += [", " + var]
+                    assignment += [", ", var]
 
                 for _ in range(5 - len(bool_assignments)):
 
@@ -853,9 +883,16 @@ class JasminGenerator:
                 if not isinstance(var_to_assign, list) and self.variable_types[var_to_assign] == JT.BOOL:
 
                     u64_var = self.expressions(action=JN.Var, scope=JT.U64)
+
                     if u64_var is not None:
 
-                        result = ["_, _, _, _, ", var_to_assign, " = #CMP(", u64_var, ", 42);\n"]
+                        if u64_var in self.variables[JS.Arrays]:
+
+                            result = ["_, _, _, _, ", var_to_assign, " = #CMP(", u64_var, "[1], 42);\n"]
+
+                        else:
+
+                            result = ["_, _, _, _, ", var_to_assign, " = #CMP(", u64_var, ", 42);\n"]
 
                     else:
 
@@ -865,7 +902,7 @@ class JasminGenerator:
 
                         else:
 
-                            result = ["_, _, _, _, ", var_to_assign, " = #CMP(", u64_var, ", 42);\n"]
+                            result = ["_, _,", var_to_assign,", _, _ = #CMP(", self.variables_input[0], ", 42);\n"]
 
                 else:
 

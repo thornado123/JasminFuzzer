@@ -1,15 +1,13 @@
 	.text
 	.p2align	5
-	.globl	_f0
-	.globl	f0
-_f0:
-f0:
-	cmpq	$42, %rdi
-	jnp 	Lf0$1
-	jne 	Lf0$2
-	je  	Lf0$3
-Lf0$3:
-Lf0$2:
-Lf0$1:
+	.globl	_main
+	.globl	main
+_main:
+main:
+	movq	$734, %rax
+	cmpq	$42, %rax
+	jbe 	Lmain$1
+	addq	$42, %rdi
+Lmain$1:
 	movq	%rdi, %rax
 	ret 

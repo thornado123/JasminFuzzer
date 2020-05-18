@@ -1,0 +1,201 @@
+,Seed,Errors,Size,Safe
+0,0,"[[], []]",549,True
+1,1,"[[], []]",156,True
+2,2,"[[], []]",363,True
+3,3,"[[], []]",305,True
+4,4,"[[], []]",99,True
+5,5,"[[], []]",305,True
+6,6,"[[], []]",145,True
+7,7,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 16 (1-17), variables result and b1 will be merged to v0', 'compilation error in functions main and main at position line 7 from line 16: assembler error Invalid pexpr for word', 'PLEASE REPORT'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 16 (1-17), variables result and b1 will be merged to v0']]",365,False
+8,8,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0', 'Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",352,True
+9,9,"[[], []]",344,True
+10,10,"[[], []]",342,True
+11,11,"[[], []]",354,True
+12,12,"[[], []]",243,False
+13,13,"[[], []]",339,True
+14,14,"[[], []]",306,True
+15,15,"[[], []]",306,True
+16,16,"[[], []]",306,True
+17,17,"[[], []]",306,True
+18,18,"[[], []]",306,True
+19,19,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0']]",314,True
+20,20,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0', 'Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",341,True
+21,21,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0', 'Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",353,True
+22,22,"[[], []]",1851,True
+23,23,"[[], []]",1222,True
+24,24,"[[], []]",306,True
+25,25,"[[], []]",306,True
+26,26,"[[], []]",306,True
+27,27,"[[], []]",100,True
+28,28,"[[], []]",157,True
+29,29,"[[], []]",306,True
+30,30,"[[], []]",100,True
+31,31,"[[], []]",306,True
+32,32,"[[], []]",306,True
+33,33,"[[], []]",339,True
+34,34,"[['WARNING: CAN NOT FIND IINFO 1', 'compilation error in functions f0 and f0 at position line 56: linearisation error assign not a word', 'PLEASE REPORT'], []]",1442,False
+35,35,"[[], []]",100,True
+36,36,"[[], []]",945,False
+37,37,"[[], []]",157,True
+38,38,"[[], []]",157,True
+39,39,"[[], []]",738,True
+40,40,"[[], []]",431,True
+41,41,"[[], []]",306,True
+42,42,"[[], ['Fatal error: exception Failure(""Environment.dim_of_var: unknown variable in the environment"")']]",310,True
+43,43,"[[], []]",100,True
+44,44,"[[], []]",358,False
+45,45,"[[], []]",313,True
+46,46,"[[], []]",313,True
+47,47,"[[], []]",330,False
+48,48,"[[], []]",306,True
+49,49,"[['compilation error in functions f0 and f0 at position line 11: assembler error assemble_x86_opn : invalid instruction (check) CMP_64', 'PLEASE REPORT'], []]",326,False
+50,50,"[[], []]",100,True
+51,51,"[[], []]",384,True
+52,52,"[[], []]",157,True
+53,53,"[[], []]",306,True
+54,54,"[[], []]",100,True
+55,55,"[[], []]",449,True
+56,56,"[['Register allocation: no register bank for type bool'], ['Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",391,True
+57,57,"[[], []]",343,True
+58,58,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 16 (1-17), variables result and b1 will be merged to v0', 'compilation error in functions main and main at position line 7 from line 16: assembler error Invalid pexpr for word', 'PLEASE REPORT'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 16 (1-17), variables result and b1 will be merged to v0']]",391,False
+59,59,"[[], []]",100,True
+60,60,"[[], []]",306,True
+61,61,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0', 'Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",341,True
+62,62,"[[], []]",390,True
+63,63,"[[], []]",390,True
+64,64,"[[], []]",379,True
+65,65,"[[], []]",306,True
+66,66,"[[], []]",1073,True
+67,67,"[['WARNING: CAN NOT FIND IINFO 1', 'compilation error in functions f0 and f0 at position line -1: assembler error Not a (x)register', 'PLEASE REPORT'], []]",311,True
+68,68,"[[], []]",100,True
+69,69,"[[], []]",306,True
+70,70,"[[], []]",306,True
+71,71,"[[], []]",333,False
+72,72,"[[], []]",306,True
+73,73,"[[], []]",306,True
+74,74,"[[], []]",306,True
+75,75,"[[], []]",100,True
+76,76,"[[], []]",980,False
+77,77,"[[], []]",352,False
+78,78,"[['compilation error in functions f0 and f0 at position line 23: assembler error: invalid condition ', '((~ ZF.78) && ZF.78)', 'PLEASE REPORT'], []]",442,False
+79,79,"[[], []]",504,False
+80,80,"[[], []]",270,True
+81,81,"[['compilation error in functions f0 and f0 at position line 7: assembler error Not a (x)register', 'PLEASE REPORT'], []]",242,True
+82,82,"[[], []]",306,True
+83,83,"[[], []]",306,True
+84,84,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0']]",318,True
+85,85,"[[], []]",306,True
+86,86,"[[], []]",332,False
+87,87,"[[], []]",332,False
+88,88,"[['compilation error in functions main and main at position line 9 from line 16: assembler error Invalid pexpr for word', 'PLEASE REPORT'], []]",358,False
+89,89,"[[], []]",305,False
+90,90,"[[], []]",100,True
+91,91,"[[], []]",306,True
+92,92,"[[], []]",306,True
+93,93,"[[], []]",306,True
+94,94,"[[], []]",306,True
+95,95,"[[], []]",161,False
+96,96,"[[], []]",617,True
+97,97,"[[], []]",157,True
+98,98,"[[], []]",157,True
+99,99,"[[], []]",458,True
+100,100,"[[], []]",360,True
+101,101,"[[], []]",286,False
+102,102,"[[], ['Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",412,True
+103,103,"[['Register allocation: no register bank for type bool'], ['Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",389,True
+104,104,"[[], []]",331,False
+105,105,"[[], []]",321,False
+106,106,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0', 'Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",354,True
+107,107,"[[], []]",330,True
+108,108,"[[], []]",321,False
+109,109,"[[], []]",321,False
+110,110,"[[], []]",307,True
+111,111,"[[], []]",101,True
+112,112,"[[], []]",320,False
+113,113,"[[], []]",320,False
+114,114,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0', 'Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",354,True
+115,115,"[[], []]",158,True
+116,116,"[[], []]",101,True
+117,117,"[[], []]",101,True
+118,118,"[[], []]",234,False
+119,119,"[[], []]",307,True
+120,120,"[[], []]",307,True
+121,121,"[[], []]",315,True
+122,122,"[[], []]",315,True
+123,123,"[[], []]",315,True
+124,124,"[[], []]",307,True
+125,125,"[[], []]",307,True
+126,126,"[[], []]",101,True
+127,127,"[[], []]",158,True
+128,128,"[[], []]",307,True
+129,129,"[[], []]",307,True
+130,130,"[[], []]",502,True
+131,131,"[[], []]",321,False
+132,132,"[[], []]",330,False
+133,133,"[[], []]",158,True
+134,134,"[['compilation error in functions main and main at position line 7 from line 13: assembler error Invalid pexpr for word', 'PLEASE REPORT'], []]",366,True
+135,135,"[[], []]",101,True
+136,136,"[[], []]",307,True
+137,137,"[['compilation error in functions main and main at position line 50: Variable allocation input.114 and input.114: variable already set', 'PLEASE REPORT'], ['Fatal error: exception Failure(""Environment.dim_of_var: unknown variable in the environment"")']]",885,True
+138,138,"[[], []]",556,False
+139,139,"[['compilation error in functions f0 and f0 at position line 9: assembler error: invalid condition ', '(~ (((32u) 1642) <u RAX.41))', 'PLEASE REPORT'], []]",243,False
+140,140,"[[], []]",331,True
+141,141,"[[], []]",307,True
+142,142,"[[], []]",334,False
+143,143,"[[], []]",331,False
+144,144,"[[], []]",831,False
+145,145,"[['WARNING: CAN NOT FIND IINFO 1', 'compilation error in functions main and main at position line -1: assembler error assemble_x86_opn : invalid instruction (check) CMP_64', 'PLEASE REPORT'], []]",744,False
+146,146,"[[], []]",158,True
+147,147,"[[], []]",548,True
+148,148,"[[], []]",101,True
+149,149,"[[], []]",359,False
+150,150,"[[], []]",512,True
+151,151,"[[], []]",307,True
+152,152,"[[], []]",307,True
+153,153,"[[], []]",350,True
+154,154,"[[], []]",307,True
+155,155,"[[], []]",307,True
+156,156,"[[], []]",397,True
+157,157,"[[], ['Fatal error: exception Failure(""Environment.dim_of_var: unknown variable in the environment"")']]",415,True
+158,158,"[[], []]",414,True
+159,159,"[['WARNING: CAN NOT FIND IINFO 1'], []]",325,False
+160,160,"[[], []]",307,True
+161,161,"[[], []]",307,True
+162,162,"[[], []]",327,True
+163,163,"[[], []]",403,True
+164,164,"[['Register allocation at line line 13: variable  _7.136 must be allocated to conflicting register ZF.78'], []]",314,False
+165,165,"[[], []]",384,True
+166,166,"[[], []]",307,True
+167,167,"[[], []]",307,True
+168,168,"[[], []]",352,True
+169,169,"[[], []]",403,True
+170,170,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0']]",339,True
+171,171,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0', 'Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",354,True
+172,172,"[[], []]",329,False
+173,173,"[[], []]",4546,True
+174,174,"[[], []]",3879,False
+175,175,"[[], []]",307,True
+176,176,"[['Register allocation at line line 38: variable  _32.205 must be allocated to conflicting register ZF.78'], []]",4053,False
+177,177,"[[], []]",101,True
+178,178,"[[], []]",307,True
+179,179,"[['Register allocation at line line 79: variable  _8.143 must be allocated to conflicting register ZF.78'], []]",2003,True
+180,180,"[[], []]",101,True
+181,181,"[[], []]",335,True
+182,182,"[[], []]",307,True
+183,183,"[[], []]",307,True
+184,184,"[[], []]",329,False
+185,185,"[['WARNING: CAN NOT FIND IINFO 1', 'compilation error in functions f0 and f0 at position line -1: assembler error Not a (x)register', 'PLEASE REPORT'], []]",2271,False
+186,186,"[[], []]",307,True
+187,187,"[[], []]",768,True
+188,188,"[[], []]",307,True
+189,189,"[[], []]",321,False
+190,190,"[[], []]",516,False
+191,191,"[['WARNING: CAN NOT FIND IINFO 1', 'WARNING: CAN NOT FIND IINFO 1', 'Register allocation at line line -1: variable ZF.170 must be allocated to conflicting register ZF.78'], []]",495,False
+192,192,"[[], []]",478,True
+193,193,"[[], []]",463,True
+194,194,"[[], []]",321,False
+195,195,"[[], []]",101,True
+196,196,"[[], []]",158,True
+197,197,"[['WARNING: CAN NOT FIND IINFO 1', 'compilation error in functions f0 and f0 at position line -1: assembler error Invalid pexpr for word', 'PLEASE REPORT'], []]",212,False
+198,198,"[[], []]",101,True
+199,199,"[['Register allocation at line line 12 from line 21: variable  _8.178 must be allocated to conflicting register ZF.78'], []]",490,False
