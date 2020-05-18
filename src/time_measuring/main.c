@@ -8,9 +8,12 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <time.h>
-extern uint64_t add1(uint64_t *p);
 
-double average_time_micro_sec(uint64_t (*func)(uint64_t), uint64_t arg)
+// Funktionsnavne: 'main' eller 'f0'
+// TODO: Tag højde for 'main'
+extern uint64_t f0(uint64_t *p);
+
+double average_time_micro_sec(uint64_t arg)
 {
     struct timeval start_time, end_time;
     double avg_time;
@@ -20,7 +23,7 @@ double average_time_micro_sec(uint64_t (*func)(uint64_t), uint64_t arg)
     for (uint32_t i = 1; i <= REPETITIONS; i++)
     {
         gettimeofday(&start_time, NULL);
-        func(arg);
+        add1(arg);
         gettimeofday(&end_time, NULL);
         time_sum += (end_time.tv_usec - start_time.tv_usec);
     }
@@ -31,7 +34,7 @@ double average_time_micro_sec(uint64_t (*func)(uint64_t), uint64_t arg)
 
 int main()
 {
-    double i = average_time_micro_sec(add1, 42);
-    printf("%.20f", i);
+    //double t = average_time_micro_sec(42);
+    //printf("%.6f", t);
     return 0;
 }
