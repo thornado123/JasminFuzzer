@@ -18,7 +18,7 @@ double average_time_micro_sec(uint64_t arg)
     struct timeval start_time, end_time;
     double avg_time;
     int time_sum = 0;
-    uint32_t REPETITIONS = 1000;
+    uint32_t REPETITIONS = 1;
 
     for (uint32_t i = 1; i <= REPETITIONS; i++)
     {
@@ -34,7 +34,7 @@ double average_time_micro_sec(uint64_t arg)
 
 int main()
 {
-    //double t = average_time_micro_sec(42);
-    //printf("%.6f", t);
+    double t = average_time_micro_sec(42);
+    printf("%.6f", t);
     return 0;
 }
