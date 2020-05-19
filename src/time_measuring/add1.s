@@ -4,6 +4,11 @@
 	.globl	add1
 _add1:
 add1:
-	movq	%rdi, %rax
-	incq	%rax
+	movq	$0, %rax
+	jmp 	Ladd1$1
+Ladd1$2:
+	addq	$1001000, %rax
+Ladd1$1:
+	cmpq	%rdi, %rax
+	jb  	Ladd1$2
 	ret 

@@ -1,7 +1,10 @@
 export
 fn add1(reg u64 arg) -> reg u64 {
 reg u64 z;
-z  = arg;
-z += 1;
+z = 0;
+while(z < arg){
+	z += 1001000;
+}
+
 return z;
 }

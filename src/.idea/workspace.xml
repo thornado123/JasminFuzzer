@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="90a82d82-ed5d-4841-9a20-5f9bbb41df80" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/asm.s" beforeDir="false" afterPath="$PROJECT_DIR$/asm.s" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/time_measuring/add1.jazz" beforeDir="false" afterPath="$PROJECT_DIR$/time_measuring/add1.jazz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/time_measuring/add1.s" beforeDir="false" afterPath="$PROJECT_DIR$/time_measuring/add1.s" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/time_measuring/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/time_measuring/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/time_measuring/test" beforeDir="false" afterPath="$PROJECT_DIR$/time_measuring/test" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -169,7 +172,7 @@
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1268" />
-    <option name="height" value="877" />
+    <option name="height" value="1417" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -249,7 +252,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1268" height="877" extended-state="0" />
+    <frame x="0" y="23" width="1268" height="1417" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.36666667" visible="true" weight="0.25661588" />
@@ -257,7 +260,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32981133" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.96178347" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.9773585" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
