@@ -12,8 +12,8 @@
 
 extern uint64_t add1(int64_t p);
 
-unsigned int REPETITIONS = 1;
-unsigned int MAX_DEPTH   = 10;
+unsigned int REPETITIONS = 10;
+unsigned int MAX_DEPTH   = 100;
 int64_t search_min       = -9223372036854775800;
 int64_t search_max       = 9223372036854775807;
 
@@ -46,12 +46,12 @@ double asm_func_input(int64_t input){
 }
 
 int64_t check_range(double * best_time, int64_t * best_val, int64_t now, int64_t last, bool maxmin){
-    printf("START Best time: %f\n", *best_time);
+//    printf("START Best time: %f\n", *best_time);
 
     int64_t c1, c2, cc;
     double t1, t2, td1, td2;
     
-    printf("Now value: %lld\n", now);
+//    printf("Now value: %lld\n", now);
     
     cc = llabs(now - last);
     c1 = now - last/2;
@@ -75,36 +75,36 @@ int64_t check_range(double * best_time, int64_t * best_val, int64_t now, int64_t
     if(maxmin){
         if(td1 < td2){
             if(td1 < 0){
-                printf("td1 < 0: %f\n", t1);
+//                printf("td1 < 0: %f\n", t1);
                 *best_time   = t1;
                 *best_val    = c1;
-                printf("B - time: %f\n", *best_time);
+//                printf("B - time: %f\n", *best_time);
             }
             return c1;
         }else{
             if(td2 < 0){
-                printf("td2 < 0\n");
+//                printf("td2 < 0\n");
                 *best_time   = t2;
                 *best_val    = c2;
-                printf("B - time: %f\n", *best_time);
+//                printf("B - time: %f\n", *best_time);
             }
             return c2;
         }
     }else{
         if(td1 > td2){
             if(td1 > 0){
-                printf("td1 > 0\n");
+//                printf("td1 > 0\n");
                 *best_time   = t1;
                 *best_val    = c1;
-                printf("B - time: %f\n", *best_time);
+//                printf("B - time: %f\n", *best_time);
             }
             return c1;
         }else{
             if(td2 > 0){
-                printf("td2 > 0\n");
+//                printf("td2 > 0\n");
                 *best_time   = t2;
                 *best_val    = c2;
-                printf("B - time: %f\n", *best_time);
+//                printf("B - time: %f\n", *best_time);
             }
             return c2;
         }
@@ -150,21 +150,22 @@ void running_asm_func()
     
     while(while_con){
         
-        printf("=== NOW CALLING MIN ===\n\n");
+//        printf("=== NOW CALLING MIN ===\n\n");
         // Calling for min
+        printf("Itteration: %d\n", counter);
         min_now = check_range(fastest, f_input, min_now, min_last[0], minimizing);
         min_last[0] = min_last[1];
         min_last[1] = min_now;
         
-        printf("END Best time: %f\n", *fastest);
+//        printf("END Best time: %f\n", *fastest);
         
-        printf("\n=== NOW CALLING MAX ===\n\n");
+//        printf("\n=== NOW CALLING MAX ===\n\n");
         // Calling for max
         max_now = check_range(slowest, s_input, max_now, max_last[0], maximizing);
         max_last[0] = max_last[1];
         max_last[1] = max_now;
         
-        printf("END Best time: %f\n\n", *slowest);
+//        printf("END Best time: %f\n\n", *slowest);
         
         printf("Fastest: %f Value: %lld\n", *fastest, *f_input);
         printf("Slowest: %f Value: %lld\n", *slowest, *s_input);
@@ -174,18 +175,18 @@ void running_asm_func()
         difference  = fabs(*fastest - *slowest);
         while_con   = counter < MAX_DEPTH && difference < dif_tresh;
         
-        if (!while_con) {
-            printf("\n\nGot to the end\n");
-            printf("Counter: %d\n", counter);
-            printf("Difference: %f\n", difference);
-        }else{
-            printf("Still going\n");
-            printf("\n------------------------------------------------------\n\n");
-        }
+//        if (!while_con) {
+////            printf("\n\nGot to the end\n");
+//            printf("Counter: %d\n", counter);
+//            printf("Difference: %f\n", difference);
+//        }else{
+////            printf("Still going\n");
+////            printf("\n------------------------------------------------------\n\n");
+//        }
     }
-
-    printf("\n\nFastest: %f Value: %lld\n", *fastest, *f_input);
-    printf("Slowest: %f Value: %lld\n", *slowest, *s_input);
+//
+//    printf("\nFastest: %f Value: %lld\n", *fastest, *f_input);
+//    printf("Slowest: %f Value: %lld\n", *slowest, *s_input);
 }
 
 int main()
