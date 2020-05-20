@@ -3,7 +3,7 @@ fn add1(reg u64 arg) -> reg u64 {
 reg u64 z;
 z = 0;
 while(z < arg){
-	z += 1001000;
+	z += 10000000000;
 }
 
 return z;
