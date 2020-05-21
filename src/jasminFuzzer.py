@@ -5,6 +5,7 @@ import sys
 import pandas as pd
 import time
 
+
 def error_analyzer(error_line):
 
     if "compilation error" in error_line:
@@ -106,7 +107,7 @@ def main():
         for i in range(start, end):
 
             gen_time = time.time()
-            
+
             program_generator = JPG.JasminGenerator(i)
             out = program_generator.get_program()
 

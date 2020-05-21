@@ -289,7 +289,7 @@ class JasminGenerator:
             if not (input_type == JT.U64 and output_type == JT.U64 and program_list[-3] not in self.variables[JS.Arrays]\
                     and self.variables_input[0] not in self.variables[JS.Arrays]):
 
-                extras = ["export fn main(reg u64 input) -> reg u64 {\n"] + extras + ["\n", "final = input;\n", "return final;\n}"]
+                extras = ["export fn main_jazz(reg u64 input) -> reg u64 {\n"] + extras + ["\n", "final = input;\n", "return final;\n}"]
                 program_list[0] = "inline"
                 program_list = program_list + ["\n"] + extras
 

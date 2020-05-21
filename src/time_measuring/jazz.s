@@ -4,8 +4,8 @@
 	.globl	main_jazz
 _main_jazz:
 main_jazz:
-	movq	$632, %rax
-	cmpq	$42, %rax
+	movw	$172, %ax
+	cmpw	$42, %ax
 	jbe 	Lmain_jazz$1
 	addq	$42, %rdi
 Lmain_jazz$1:
