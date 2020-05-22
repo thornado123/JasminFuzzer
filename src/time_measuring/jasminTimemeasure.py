@@ -150,7 +150,7 @@ def main():
     result_outputs = pd.DataFrame(columns=["Seed", "Time", "Fastest", "Slowest", "F_input", "S_input", "Total_running_time"])
     next = 0
     list_of_secure_programs = pickle.load(open(f"{DIR_PATH}/../../evaluation/list_of_secure_programs.p", "rb" ) )
-    nonterminating_seeds = [30068,30179,31542]
+    nonterminating_seeds = [30068,30179,31542,33216]
     ##print("PROGRAM:", list_of_secure_programs[int(start):int(end)])
 
     for i in range(int(start), int(end)):
