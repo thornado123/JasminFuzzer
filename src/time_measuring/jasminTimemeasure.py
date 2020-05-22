@@ -2,7 +2,9 @@ import subprocess
 import time
 import pandas as pd
 import sys
-sys.path.insert(1, '/Users/thorjakobsen/GIT/JasminFuzzer/src')
+import os
+DIR_PATH = os.path.dirname(os.path.realpath(__file__))
+sys.path.insert(1, f'{DIR_PATH}/..')
 import jasminGenerator as JPG
 import jasminPrettyPrint as JPP
 import pickle
@@ -19,7 +21,6 @@ import pickle
     6) Save these outputs to a file on disk (pandas)
 
 """
-
 
 class JasminTimeMeasurer:
 
@@ -75,7 +76,7 @@ class JasminTimeMeasurer:
         writing_file.close()
 
     def compile_jasmin(self):
-        compiler_path = "/Users/thorjakobsen/GIT/jasmin/compiler/./jasminc"
+        compiler_path = "/home/josefgharib/Desktop/Uni Projects/jasmin/compiler/./jasminc" #"/Users/thorjakobsen/GIT/jasmin/compiler/./jasminc"
 
         process = subprocess.Popen([compiler_path, self.jasmin_file, "-o", "jazz.s"],
                                    stdout=subprocess.PIPE,
@@ -143,25 +144,29 @@ class JasminTimeMeasurer:
 
 
 def main():
-
     start = sys.argv[1]
     end   = sys.argv[2]
 
     result_outputs = pd.DataFrame(columns=["Seed", "Time", "Fastest", "Slowest", "F_input", "S_input", "Total_running_time"])
     next = 0
-    list_of_secure_programs = pickle.load(open("/Users/thorjakobsen/GIT/JasminFuzzer/evaluation/list_of_secure_programs.p", "rb" ) )
-
-    print(list_of_secure_programs[int(start):int(end)])
+    list_of_secure_programs = pickle.load(open(f"{DIR_PATH}/../../evaluation/list_of_secure_programs.p", "rb" ) )
+    nonterminating_seeds = [30068,30179,31542]
+    ##print("PROGRAM:", list_of_secure_programs[int(start):int(end)])
 
     for i in range(int(start), int(end)):
+        program_seed = list_of_secure_programs[i]
+        print(program_seed)
 
-        program_generator = JPG.JasminGenerator(list_of_secure_programs[i])
+        if program_seed in nonterminating_seeds:
+            continue
+
+        program_generator = JPG.JasminGenerator(program_seed)
         out = program_generator.get_program()
         out = [str(x) for x in out]
         out = "".join(out)
         out = JPP.jasmin_pretty_print(out)
 
-        with open("/Users/thorjakobsen/GIT/JasminFuzzer/src/time_measuring/test.jazz", "w") as file:
+        with open(f"{DIR_PATH}/test.jazz", "w") as file:
             file.write(out)
             file.close()
 
@@ -180,7 +185,7 @@ def main():
 
         print(next, "DONE")
 
-    result_outputs.to_csv("/Users/thorjakobsen/GIT/JasminFuzzer/evaluation/data/time_measure_results_" + start + "_" + end + ".csv")
+    result_outputs.to_csv(f"{DIR_PATH}/../../evaluation/data/time_measure_results_" + start + "_" + end + ".csv")
 
 
 if __name__ == '__main__':
