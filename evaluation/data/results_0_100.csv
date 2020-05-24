@@ -1,0 +1,101 @@
+,Seed,Errors,Size,Safe,GenerationTime,SafetyCheckTime
+0,0,"[[], []]",549,True,0.004724025726318359,0.030436038970947266
+1,1,"[[], []]",156,True,0.0012898445129394531,0.022893667221069336
+2,2,"[[], []]",363,True,0.002924203872680664,0.02286672592163086
+3,3,"[[], []]",305,True,0.0014798641204833984,0.028677940368652344
+4,4,"[[], []]",99,True,0.0007879734039306641,0.019690990447998047
+5,5,"[[], []]",305,True,0.001071929931640625,0.027974843978881836
+6,6,"[[], []]",145,True,0.0012707710266113281,0.02108001708984375
+7,7,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 16 (1-17), variables result and b1 will be merged to v0', 'compilation error in functions main and main at position line 7 from line 16: assembler error Invalid pexpr for word', 'PLEASE REPORT'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 16 (1-17), variables result and b1 will be merged to v0']]",365,False,0.001605987548828125,0.0281829833984375
+8,8,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0', 'Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",352,True,0.0009479522705078125,0.03053593635559082
+9,9,"[[], []]",344,True,0.001756906509399414,0.02940201759338379
+10,10,"[[], []]",342,True,0.0015940666198730469,0.029567956924438477
+11,11,"[[], []]",354,True,0.0016927719116210938,0.03077387809753418
+12,12,"[[], []]",243,False,0.0026328563690185547,0.0288088321685791
+13,13,"[[], []]",339,True,0.002118825912475586,0.023642778396606445
+14,14,"[[], []]",306,True,0.0014412403106689453,0.028286218643188477
+15,15,"[[], []]",306,True,0.0013759136199951172,0.02753591537475586
+16,16,"[[], []]",306,True,0.001210927963256836,0.02756786346435547
+17,17,"[[], []]",306,True,0.0015077590942382812,0.02728104591369629
+18,18,"[[], []]",306,True,0.0015077590942382812,0.027676820755004883
+19,19,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0']]",314,True,0.0007967948913574219,0.029382944107055664
+20,20,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0', 'Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",341,True,0.0007669925689697266,0.029462099075317383
+21,21,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 14 (1-17), variables result and b1 will be merged to v0', 'Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",353,True,0.0009338855743408203,0.030642986297607422
+22,22,"[[], []]",1851,True,0.02579522132873535,0.023350000381469727
+23,23,"[[], []]",1222,True,0.012537240982055664,0.022196054458618164
+24,24,"[[], []]",306,True,0.001371145248413086,0.029006004333496094
+25,25,"[[], []]",306,True,0.0012140274047851562,0.027059078216552734
+26,26,"[[], []]",306,True,0.0013899803161621094,0.028186798095703125
+27,27,"[[], []]",100,True,0.0007417201995849609,0.019308805465698242
+28,28,"[[], []]",157,True,0.0006089210510253906,0.023207902908325195
+29,29,"[[], []]",306,True,0.0015377998352050781,0.029115915298461914
+30,30,"[[], []]",100,True,0.0010390281677246094,0.01905989646911621
+31,31,"[[], []]",306,True,0.0015559196472167969,0.027862071990966797
+32,32,"[[], []]",306,True,0.002048969268798828,0.02928900718688965
+33,33,"[[], []]",339,True,0.0017800331115722656,0.02681279182434082
+34,34,"[['WARNING: CAN NOT FIND IINFO 1', 'compilation error in functions f0 and f0 at position line 56: linearisation error assign not a word', 'PLEASE REPORT'], []]",1442,False,0.020664215087890625,1.8417479991912842
+35,35,"[[], []]",100,True,0.0012869834899902344,0.019915103912353516
+36,36,"[[], []]",945,False,0.008361101150512695,0.1730029582977295
+37,37,"[[], []]",157,True,0.0009479522705078125,0.023312807083129883
+38,38,"[[], []]",157,True,0.0009629726409912109,0.02245616912841797
+39,39,"[[], []]",738,True,0.011553049087524414,0.034812211990356445
+40,40,"[[], []]",431,True,0.002669095993041992,0.029234886169433594
+41,41,"[[], []]",306,True,0.0011157989501953125,0.028467178344726562
+42,42,"[[], ['Fatal error: exception Failure(""Environment.dim_of_var: unknown variable in the environment"")']]",310,True,0.0009758472442626953,0.026220083236694336
+43,43,"[[], []]",100,True,0.0007801055908203125,0.018764734268188477
+44,44,"[[], []]",358,False,0.0013952255249023438,0.057283878326416016
+45,45,"[[], []]",313,True,0.0008471012115478516,0.027383804321289062
+46,46,"[[], []]",313,True,0.0008981227874755859,0.027339935302734375
+47,47,"[[], []]",330,False,0.0017349720001220703,0.028056859970092773
+48,48,"[[], []]",306,True,0.0012197494506835938,0.02841782569885254
+49,49,"[['compilation error in functions f0 and f0 at position line 11: assembler error assemble_x86_opn : invalid instruction (check) CMP_64', 'PLEASE REPORT'], []]",326,False,0.0037109851837158203,0.03296089172363281
+50,50,"[[], []]",100,True,0.0011546611785888672,0.018337011337280273
+51,51,"[[], []]",384,True,0.0028388500213623047,0.0210568904876709
+52,52,"[[], []]",157,True,0.001352071762084961,0.022329092025756836
+53,53,"[[], []]",306,True,0.001135110855102539,0.02795696258544922
+54,54,"[[], []]",100,True,0.0004818439483642578,0.019022226333618164
+55,55,"[[], []]",449,True,0.0033860206604003906,0.033200979232788086
+56,56,"[['Register allocation: no register bank for type bool'], ['Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",391,True,0.0015959739685058594,0.03427481651306152
+57,57,"[[], []]",343,True,0.002170085906982422,0.022932052612304688
+58,58,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 16 (1-17), variables result and b1 will be merged to v0', 'compilation error in functions main and main at position line 7 from line 16: assembler error Invalid pexpr for word', 'PLEASE REPORT'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 16 (1-17), variables result and b1 will be merged to v0']]",391,False,0.0017268657684326172,0.06349897384643555
+59,59,"[[], []]",100,True,0.0006811618804931641,0.019577741622924805
+60,60,"[[], []]",306,True,0.0015587806701660156,0.02747631072998047
+61,61,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0', 'Fatal error: exception File ""src/safety.ml"", line 3550, characters 16-22: Assertion failed']]",341,True,0.0016329288482666016,0.029407024383544922
+62,62,"[[], []]",390,True,0.002307891845703125,0.03625082969665527
+63,63,"[[], []]",390,True,0.002131938934326172,0.036917924880981445
+64,64,"[[], []]",379,True,0.0017490386962890625,0.03464794158935547
+65,65,"[[], []]",306,True,0.0012059211730957031,0.02814793586730957
+66,66,"[[], []]",1073,True,0.012925863265991211,0.03553414344787598
+67,67,"[['WARNING: CAN NOT FIND IINFO 1', 'compilation error in functions f0 and f0 at position line -1: assembler error Not a (x)register', 'PLEASE REPORT'], []]",311,True,0.0028569698333740234,0.029209136962890625
+68,68,"[[], []]",100,True,0.0006968975067138672,0.019464969635009766
+69,69,"[[], []]",306,True,0.001132965087890625,0.02782583236694336
+70,70,"[[], []]",306,True,0.0012412071228027344,0.027868986129760742
+71,71,"[[], []]",333,False,0.0019278526306152344,0.028289079666137695
+72,72,"[[], []]",306,True,0.0014548301696777344,0.028098106384277344
+73,73,"[[], []]",306,True,0.0013921260833740234,0.027163028717041016
+74,74,"[[], []]",306,True,0.001416921615600586,0.028002023696899414
+75,75,"[[], []]",100,True,0.0008680820465087891,0.018887996673583984
+76,76,"[[], []]",980,False,0.008396148681640625,0.4009552001953125
+77,77,"[[], []]",352,False,0.0015532970428466797,0.030244112014770508
+78,78,"[['compilation error in functions f0 and f0 at position line 23: assembler error: invalid condition ', '((~ ZF.78) && ZF.78)', 'PLEASE REPORT'], []]",442,False,0.003920793533325195,0.056890010833740234
+79,79,"[[], []]",504,False,0.002607107162475586,0.04657483100891113
+80,80,"[[], []]",270,True,0.0024728775024414062,0.03151583671569824
+81,81,"[['compilation error in functions f0 and f0 at position line 7: assembler error Not a (x)register', 'PLEASE REPORT'], []]",242,True,0.002201080322265625,0.03176283836364746
+82,82,"[[], []]",306,True,0.0015780925750732422,0.027617931365966797
+83,83,"[[], []]",306,True,0.0008852481842041016,0.027820825576782227
+84,84,"[['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0'], ['WARNING: at /Users/thorjakobsen/GIT/jasmin/compiler/tests/jasminFuzzer/test.jazz: line 12 (1-17), variables result and b1 will be merged to v0']]",318,True,0.0010700225830078125,0.02948904037475586
+85,85,"[[], []]",306,True,0.0008769035339355469,0.030447721481323242
+86,86,"[[], []]",332,False,0.0019152164459228516,0.03370499610900879
+87,87,"[[], []]",332,False,0.0017580986022949219,0.03362607955932617
+88,88,"[['compilation error in functions main and main at position line 9 from line 16: assembler error Invalid pexpr for word', 'PLEASE REPORT'], []]",358,False,0.002296924591064453,0.03147387504577637
+89,89,"[[], []]",305,False,0.0012042522430419922,0.0275421142578125
+90,90,"[[], []]",100,True,0.0007588863372802734,0.01879596710205078
+91,91,"[[], []]",306,True,0.0013370513916015625,0.02765798568725586
+92,92,"[[], []]",306,True,0.0010540485382080078,0.028493165969848633
+93,93,"[[], []]",306,True,0.001344919204711914,0.028280973434448242
+94,94,"[[], []]",306,True,0.0014019012451171875,0.027289867401123047
+95,95,"[[], []]",161,False,0.0016260147094726562,0.022035837173461914
+96,96,"[[], []]",617,True,0.010406017303466797,0.043830156326293945
+97,97,"[[], []]",157,True,0.0008597373962402344,0.021226882934570312
+98,98,"[[], []]",157,True,0.00080108642578125,0.022295713424682617
+99,99,"[[], []]",458,True,0.00244903564453125,0.027671098709106445

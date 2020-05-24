@@ -91,6 +91,8 @@ def main():
             file.write(out)
             file.close()
 
+        print(out)
+
         process = subprocess.Popen([compiler_path, source_path + sys.argv[1] + ".jazz", "-o", "test"],
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
