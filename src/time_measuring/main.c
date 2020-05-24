@@ -10,7 +10,7 @@
 #include <math.h>
 #include <stdbool.h>
 
-extern int64_t main_jazz(int64_t p);
+extern int64_t f0(int64_t p);
 
 unsigned int REPETITIONS = 1000;
 unsigned int MAX_DEPTH   = 1000;
@@ -35,7 +35,7 @@ timeinfo = localtime ( &rawtime );
 for (i = 0; i < REPETITIONS; i++)
 {
 measured_time   = clock();
-result          = main_jazz(input);
+result          = f0(input);
 measured_time   = clock() - measured_time;
 double time_t   = ((double) measured_time )/CLOCKS_PER_SEC;
 avg_time        += time_t;

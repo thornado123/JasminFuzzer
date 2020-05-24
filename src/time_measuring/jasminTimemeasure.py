@@ -9,6 +9,9 @@ import jasminGenerator as JPG
 import jasminPrettyPrint as JPP
 import pickle
 
+import signal
+from contextlib import contextmanager
+
 """
 
     Program todo:
@@ -142,7 +145,25 @@ class JasminTimeMeasurer:
         result[6] = time.time() - start
         return result
 
-
+nonterminating_seeds = []
+@contextmanager
+def timeout(time, seed):
+    global nonterminating_seeds
+    # Register a function to raise a TimeoutError on the signal.
+    signal.signal(signal.SIGALRM, raise_timeout)
+    # Schedule the signal to be sent after ``time``.
+    signal.alarm(time)
+    try:
+        yield
+    except TimeoutError:
+        print(f'Seed "{seed}" timed out!')
+        nonterminating_seeds.append(seed)
+    finally:
+        # Unregister the signal so it won't be triggered
+        # if the timeout is not reached.
+        signal.signal(signal.SIGALRM, signal.SIG_IGN)
+def raise_timeout(signum, frame):
+    raise TimeoutError
 def main():
     start = sys.argv[1]
     end   = sys.argv[2]
@@ -150,41 +171,43 @@ def main():
     result_outputs = pd.DataFrame(columns=["Seed", "Time", "Fastest", "Slowest", "F_input", "S_input", "Total_running_time"])
     next = 0
     list_of_secure_programs = pickle.load(open(f"{DIR_PATH}/../../evaluation/list_of_secure_programs.p", "rb" ) )
-    nonterminating_seeds = [30068,30179,31542,33216]
-    ##print("PROGRAM:", list_of_secure_programs[int(start):int(end)])
+    #nonterminating_seeds = [30068,30179,31542,33216]
 
     for i in range(int(start), int(end)):
         program_seed = list_of_secure_programs[i]
-        print(program_seed)
+        # Timeout after 15 seconds
+        with timeout(15,program_seed):
+            print(program_seed)
 
-        if program_seed in nonterminating_seeds:
-            continue
+            program_generator = JPG.JasminGenerator(program_seed)
+            out = program_generator.get_program()
+            out = [str(x) for x in out]
+            out = "".join(out)
+            out = JPP.jasmin_pretty_print(out)
 
-        program_generator = JPG.JasminGenerator(program_seed)
-        out = program_generator.get_program()
-        out = [str(x) for x in out]
-        out = "".join(out)
-        out = JPP.jasmin_pretty_print(out)
+            with open(f"{DIR_PATH}/test.jazz", "w") as file:
+                file.write(out)
+                file.close()
 
-        with open(f"{DIR_PATH}/test.jazz", "w") as file:
-            file.write(out)
-            file.close()
+            jasmin_t = JasminTimeMeasurer("test.jazz", "main.c")
+            jasmin_t.get_jasmin_func_name()
+            jasmin_t.change_name_in_main()
+            jasmin_t.compile_jasmin()
+            jasmin_t.compile_main_c()
+            result = jasmin_t.run_main_c()
 
-        jasmin_t = JasminTimeMeasurer("test.jazz", "main.c")
-        jasmin_t.get_jasmin_func_name()
-        jasmin_t.change_name_in_main()
-        jasmin_t.compile_jasmin()
-        jasmin_t.compile_main_c()
-        result = jasmin_t.run_main_c()
+            result[0] = list_of_secure_programs[i]
+            result[1] = float(result[3]) - float(result[2])
 
-        result[0] = list_of_secure_programs[i]
-        result[1] = float(result[3]) - float(result[2])
+            result_outputs.loc[next] = result
+            next += 1
 
-        result_outputs.loc[next] = result
-        next += 1
+            print(next, "DONE")
 
-        print(next, "DONE")
-
+    global nonterminating_seeds
+    # Quick and dirty - last row will be multiple arrays of the samenon-terminating seeds.
+    result_outputs.loc[next] = str(nonterminating_seeds)
+    print(nonterminating_seeds)
     result_outputs.to_csv(f"{DIR_PATH}/../../evaluation/data/time_measure_results_" + start + "_" + end + ".csv")
 
 
