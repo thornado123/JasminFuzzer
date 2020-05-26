@@ -4,21 +4,11 @@
 	.globl	main_jazz
 _main_jazz:
 main_jazz:
-	cmpq	$42, %rdi
-	movq	$363, %rax
-	je  	Lmain_jazz$2
-Lmain_jazz$5:
-	je  	Lmain_jazz$6
-Lmain_jazz$6:
-	jne 	Lmain_jazz$5
-	jmp 	Lmain_jazz$3
-Lmain_jazz$2:
-	je  	Lmain_jazz$4
-Lmain_jazz$4:
-Lmain_jazz$3:
-	cmpq	$42, %rax
+	movw	$38, %ax
+	imulw	%ax, %ax
+	cmpw	$42, %ax
 	jbe 	Lmain_jazz$1
-	incq	%rdi
+	addq	$42, %rdi
 Lmain_jazz$1:
 	movq	%rdi, %rax
 	ret 
