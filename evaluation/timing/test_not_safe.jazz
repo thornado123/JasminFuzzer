@@ -1,0 +1,24 @@
+export fn f0(reg u64 input) -> reg u64{
+reg bool v0;
+reg u64 result;
+_, v0, _, _,_ = #CMP(input, 43);
+
+if (v0) {
+	input += 1;
+	_, v0, _,_, _ = #CMP(input, 43);
+	if(!v0){
+		while(true){
+			result += 1;
+		}
+	}else{
+	
+		result = 2;		
+
+	}
+}else{
+	result = 1;
+}
+
+return result;
+
+}
